@@ -1,0 +1,29 @@
+# Dependencies
+node_modules
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Tool caches and reports
+.cache/
+.eslintcache
+.stylelintcache
+coverage/
+
+# Build artifacts, if a local experiment creates them.
+build/
+dist/
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Theme override for a form element.
+ *
+ * fd-field auto-wires fd-input/fd-textarea. Selectors read their accessible
+ * name from a label attribute passed through this wrapper.
+ */
+#}
+{% set classes = [
+  'js-form-item',
+  'form-item',
+  'js-form-type-' ~ type|clean_class,
+  'form-type-' ~ type|clean_class,
+  'js-form-item-' ~ name|clean_class,
+  'form-item-' ~ name|clean_class,
+  title_display not in ['after', 'before'] ? 'form-no-label',
+  disabled == 'disabled' ? 'form-disabled',
+  errors ? 'form-item--error',
+] %}
+
+<fd-field{{ attributes.addClass(classes).setAttribute('data-required', required ? 'true' : 'false').setAttribute('data-invalid', errors ? 'true' : 'false') }}>
+  {% set label_text = label|render|striptags|trim %}
+  {% set description_text = description.content ? description.content|render|striptags|trim : '' %}
+  {% set control_id = element['#id']|default('') %}
+  {% if label_display in ['before', 'invisible'] %}
+    <fd-label{% if control_id %} for="{{ control_id }}" data-fdic-enhanced-label-for="{{ control_id }}"{% endif %} label="{{ label_text }}"{% if description_text %} description="{{ description_text }}"{% endif %}{{ required ? ' required' }}{% if label_display == 'invisible' %} class="fdic-visually-hidden"{% endif %}></fd-label>
+    {% if control_id and label_text %}
+      <label class="fdic-control-fallback-label{{ label_display == 'invisible' ? ' fdic-visually-hidden' }}" data-fdic-control-fallback-label-for="{{ control_id }}" for="{{ control_id }}--native">{{ label_text }}{% if required %}<span aria-hidden="true"> *</span>{% endif %}</label>
+    {% endif %}
+  {% endif %}
+
+  {{ prefix }}
+  {{ children }}
+  {{ suffix }}
+
+  {% if label_display == 'after' %}
+    <fd-label{% if control_id %} for="{{ control_id }}" data-fdic-enhanced-label-for="{{ control_id }}"{% endif %} label="{{ label_text }}"{% if description_text %} description="{{ description_text }}"{% endif %}{{ required ? ' required' }}></fd-label>
+    {% if control_id and label_text %}
+      <label class="fdic-control-fallback-label" data-fdic-control-fallback-label-for="{{ control_id }}" for="{{ control_id }}--native">{{ label_text }}{% if required %}<span aria-hidden="true"> *</span>{% endif %}</label>
+    {% endif %}
+  {% endif %}
+
+  {% if description.content %}
+    <div{{ description.attributes.addClass('description') }}>{{ description.content }}</div>
+  {% endif %}
+
+  {% if errors %}
+    {% set error_text = errors|render|striptags|trim %}
+    <fd-message{% if control_id %} for="{{ control_id }}"{% endif %} state="error" message="{{ error_text }}">{{ error_text }}</fd-message>
+  {% endif %}
+</fd-field>

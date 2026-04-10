@@ -1,0 +1,50 @@
+{#
+/**
+ * @file
+ * Theme override for the main page structure.
+ */
+#}
+<div class="fdic-page">
+  {{ page.header }}
+
+  {% if page.breadcrumb %}
+    <div class="fdic-region fdic-breadcrumb-region">
+      {{ page.breadcrumb }}
+    </div>
+  {% endif %}
+
+  {% if page.highlighted %}
+    <div class="fdic-region fdic-highlighted" role="region" aria-label="{{ 'Highlighted content'|t }}">
+      {{ page.highlighted }}
+    </div>
+  {% endif %}
+
+  {% set layout_classes = [
+    'fdic-container',
+    'fdic-main-layout',
+    page.sidebar_first ? 'has-sidebar-first',
+    page.sidebar_second ? 'has-sidebar-second',
+  ] %}
+
+  <main id="main-content" class="fdic-main" role="main" tabindex="-1">
+    <div{{ create_attribute({'class': layout_classes}) }}>
+      {% if page.sidebar_first %}
+        <aside class="fdic-sidebar fdic-sidebar-first" role="complementary" aria-label="{{ 'First sidebar'|t }}">
+          {{ page.sidebar_first }}
+        </aside>
+      {% endif %}
+
+      <div class="fdic-content">
+        {{ page.content }}
+      </div>
+
+      {% if page.sidebar_second %}
+        <aside class="fdic-sidebar fdic-sidebar-second" role="complementary" aria-label="{{ 'Second sidebar'|t }}">
+          {{ page.sidebar_second }}
+        </aside>
+      {% endif %}
+    </div>
+  </main>
+
+  {{ page.footer }}
+</div>

@@ -1,0 +1,39 @@
+{#
+/**
+ * @file
+ * Theme override for radio form elements.
+ *
+ * fd-radio is a form-associated custom element. Native control attributes are
+ * prepared in preprocess and rendered on the host. The native fallback remains
+ * usable until the custom element is defined.
+ */
+#}
+{% set classes = [
+  'js-form-item',
+  'form-item',
+  'js-form-type-' ~ type|clean_class,
+  'form-type-' ~ type|clean_class,
+  'js-form-item-' ~ name|clean_class,
+  'form-item-' ~ name|clean_class,
+  disabled == 'disabled' ? 'form-disabled',
+  errors ? 'form-item--error',
+] %}
+
+<fd-field{{ attributes.addClass(classes).setAttribute('data-invalid', errors ? 'true' : 'false') }}>
+  {% set label_text = label|render|striptags|trim %}
+  {% set control_id = element['#id']|default('') %}
+  <fd-radio{{ fdic_control_attributes }}>{{ label_text }}</fd-radio>
+  <span class="fdic-control-fallback fdic-choice-fallback" data-fdic-control-fallback-for="{{ control_id }}">
+      {{ fdic_fallback_children|default(children) }}
+      <label class="fdic-choice-fallback__label"{% if fdic_fallback_id|default('') %} for="{{ fdic_fallback_id }}"{% endif %}>{{ label_text }}</label>
+  </span>
+
+  {% if description.content %}
+    <div{{ description.attributes.addClass('description') }}>{{ description.content }}</div>
+  {% endif %}
+
+  {% if errors %}
+    {% set error_text = errors|render|striptags|trim %}
+    <fd-message{% if control_id %} for="{{ control_id }}"{% endif %} state="error" message="{{ error_text }}">{{ error_text }}</fd-message>
+  {% endif %}
+</fd-field>

@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Theme override for submit input elements.
+ *
+ * Uses a native <input type="submit"> rather than <fd-button> because the DS
+ * fd-button component renders an internal type="button" that does not
+ * participate in native form submission. This preserves progressive
+ * enhancement — forms work with or without JavaScript.
+ */
+#}
+<input{{ attributes.addClass('fdic-form-control') }} />{{ children }}

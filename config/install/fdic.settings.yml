@@ -1,0 +1,3 @@
+header_search_action: '/search'
+header_search_param_name: 'keys'
+header_search_placeholder: 'Search FDIC'

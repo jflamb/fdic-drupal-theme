@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Theme override for radio groups.
+ */
+#}
+{% set group_attributes = attributes
+  .addClass('form-radios')
+  .setAttribute('label', fdic_group_label|default(''))
+  .setAttribute('data-required', fdic_group_required ? 'true' : 'false')
+  .setAttribute('data-invalid', fdic_group_error ? 'true' : 'false')
+%}
+<fd-radio-group{{ group_attributes }}{{ fdic_group_required ? ' required' }}{{ fdic_group_disabled ? ' disabled' }}>
+  {% if fdic_group_description %}
+    <span slot="description">{{ fdic_group_description }}</span>
+  {% endif %}
+  {{ children }}
+  {% if fdic_group_error %}
+    <span slot="error">{{ fdic_group_error }}</span>
+  {% endif %}
+</fd-radio-group>

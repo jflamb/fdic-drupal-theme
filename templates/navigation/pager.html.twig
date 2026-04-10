@@ -1,0 +1,46 @@
+{#
+/**
+ * @file
+ * Theme override for pager navigation.
+ *
+ * fd-pagination receives 1-indexed page state. Drupal keeps 0-indexed page
+ * query values, so data-drupal-href-template is adapted by pagination-init.js.
+ * Progressive enhancement: <noscript> provides a plain pager link list.
+ */
+#}
+{% if items %}
+  {% set current = current|default(1) %}
+  {% set total = fdic_total_pages|default(items.pages ? items.pages|length : current) %}
+  <nav class="pager" role="navigation" aria-labelledby="pagination-heading">
+    <h4 id="pagination-heading" class="fdic-visually-hidden">{{ 'Pagination'|t }}</h4>
+    <fd-pagination
+      current-page="{{ current }}"
+      total-pages="{{ total }}"
+      {% if fdic_pager_href_template is defined %}href-template="{{ fdic_pager_href_template }}"{% endif %}
+      {% if fdic_pager_href_template is defined %}data-drupal-href-template="{{ fdic_pager_href_template }}"{% endif %}
+    ></fd-pagination>
+    <noscript>
+      <ul class="pager__items">
+        {% if items.previous %}
+          <li class="pager__item pager__item--previous">
+            <a href="{{ items.previous.href }}" rel="prev">{{ 'Previous'|t }}</a>
+          </li>
+        {% endif %}
+        {% for key, item in items.pages %}
+          <li class="pager__item{{ current == key ? ' is-active' }}">
+            {% if current == key %}
+              <span aria-current="page">{{ key }}</span>
+            {% else %}
+              <a href="{{ item.href }}">{{ key }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+        {% if items.next %}
+          <li class="pager__item pager__item--next">
+            <a href="{{ items.next.href }}" rel="next">{{ 'Next'|t }}</a>
+          </li>
+        {% endif %}
+      </ul>
+    </noscript>
+  </nav>
+{% endif %}

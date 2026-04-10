@@ -1,0 +1,23 @@
+fdic.mobile:
+  label: Mobile
+  mediaQuery: '(max-width: 47.999rem)'
+  weight: 0
+  multipliers:
+    - 1x
+    - 2x
+
+fdic.tablet:
+  label: Tablet
+  mediaQuery: '(min-width: 48rem) and (max-width: 63.999rem)'
+  weight: 1
+  multipliers:
+    - 1x
+    - 2x
+
+fdic.desktop:
+  label: Desktop
+  mediaQuery: '(min-width: 64rem)'
+  weight: 2
+  multipliers:
+    - 1x
+    - 2x

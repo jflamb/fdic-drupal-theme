@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Theme override for responsive images.
+ */
+#}
+{% if output_image_tag %}
+  {{ img_element }}
+{% else %}
+  <picture{{ attributes.addClass('fdic-responsive-image') }}>
+    {% if sources %}
+      {% for source_attributes in sources %}
+        <source{{ source_attributes }} />
+      {% endfor %}
+    {% endif %}
+    {{ img_element }}
+  </picture>
+{% endif %}

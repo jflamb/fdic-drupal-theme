@@ -1,0 +1,23 @@
+{#
+/**
+ * @file
+ * Theme override for search result items.
+ */
+#}
+<article{{ attributes.addClass('search-result', 'fdic-search-result') }}>
+  <h3 class="search-result__title">
+    <fd-link>
+      <a href="{{ url }}">{{ title }}</a>
+    </fd-link>
+  </h3>
+
+  {% if snippet %}
+    <p class="search-result__snippet">{{ snippet }}</p>
+  {% endif %}
+
+  {% if info %}
+    <footer class="search-result__info">
+      {{ info }}
+    </footer>
+  {% endif %}
+</article>

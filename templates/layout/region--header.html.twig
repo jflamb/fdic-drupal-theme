@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Theme override for the header region.
+ */
+#}
+{{ attach_library('fdic/global-header') }}
+
+{% set header_source = {
+  items: fdic_main_menu|default([]),
+  search: fdic_header_search|default({
+    action: '/search',
+    paramName: 'keys',
+    placeholder: 'Search FDIC'|t
+  })
+} %}
+
+<header class="fdic-site-header" role="banner">
+  <fd-global-header data-fdic-global-header>
+    <script type="application/json" data-fdic-global-header-source>{{ header_source|json_encode(constant('JSON_HEX_TAG'))|raw }}</script>
+  </fd-global-header>
+  {% if content %}
+    <div class="fdic-site-header__content">
+      {{ content }}
+    </div>
+  {% endif %}
+</header>

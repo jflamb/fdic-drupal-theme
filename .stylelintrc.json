@@ -1,0 +1,23 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "custom-property-no-missing-var-function": null,
+    "property-no-vendor-prefix": null,
+    "comment-empty-line-before": null,
+    "length-zero-no-unit": null,
+    "media-feature-range-notation": null,
+    "selector-class-pattern": null,
+    "value-keyword-case": [
+      "lower",
+      {
+        "ignoreKeywords": ["currentColor"]
+      }
+    ],
+    "declaration-no-important": [
+      true,
+      {
+        "severity": "warning"
+      }
+    ]
+  }
+}

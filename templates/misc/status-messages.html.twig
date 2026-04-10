@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Theme override for status messages.
+ *
+ * fd-alert API:
+ *   - type: "success" | "warning" | "error" | "info"
+ *   - title: string (the alert heading)
+ *   - live: "polite" | "assertive" (ARIA live region behavior)
+ */
+#}
+{% set type_map = {
+  status: 'success',
+  warning: 'warning',
+  error: 'error',
+} %}
+
+{% for type, messages in message_list %}
+  {% set alert_type = type_map[type]|default('info') %}
+  {% set title = status_headings[type]|default(type|capitalize) %}
+  <fd-alert type="{{ alert_type }}" title="{{ title }}" live="{{ type == 'error' ? 'assertive' : 'polite' }}">
+    {% if messages|length > 1 %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      {{ messages|first }}
+    {% endif %}
+  </fd-alert>
+{% endfor %}

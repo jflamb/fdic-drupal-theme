@@ -1,0 +1,66 @@
+{#
+/**
+ * @file
+ * Theme override for select elements.
+ *
+ * fd-selector is a form-associated custom element that expects fd-option
+ * children. Drupal select attributes are passed to the fd-selector host.
+ *
+ * DS does not register fd-optgroup, so grouped selects fall back to a
+ * native <select> to avoid rendering broken markup.
+ *
+ * A native fallback remains usable until the custom element is defined.
+ */
+#}
+{% set has_optgroups = false %}
+{% for option in options %}
+  {% if option.type == 'optgroup' %}
+    {% set has_optgroups = true %}
+  {% endif %}
+{% endfor %}
+
+{% if has_optgroups %}
+  {# Native select for optgroup support until DS ships fd-optgroup. #}
+  {% set control_id = fdic_select_id|default('') %}
+  {% set fallback_attributes = attributes %}
+  {% if control_id %}
+    {% set fallback_attributes = fallback_attributes.setAttribute('id', control_id ~ '--native') %}
+  {% endif %}
+  <select{{ fallback_attributes }}>
+    {% for option in options %}
+      {% if option.type == 'optgroup' %}
+        <optgroup label="{{ option.label }}">
+          {% for sub_option in option.options %}
+            <option value="{{ sub_option.value }}"{{ sub_option.selected ? ' selected' }}>{{ sub_option.label }}</option>
+          {% endfor %}
+        </optgroup>
+      {% elseif option.type == 'option' %}
+        <option value="{{ option.value }}"{{ option.selected ? ' selected' }}>{{ option.label }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+{% else %}
+  {% set control_id = fdic_select_id|default('') %}
+  {% set is_multiple = fdic_select_multiple|default(false) or attributes.hasAttribute('multiple') %}
+  <fd-selector{{ attributes.addClass('fdic-form-control').setAttribute('label', fdic_select_label|default('')) }}{% if is_multiple %} variant="multiple"{% endif %}>
+    {% for option in options %}
+      {% if option.type == 'option' %}
+        <fd-option value="{{ option.value }}"{{ option.selected ? ' selected' }}>{{ option.label }}</fd-option>
+      {% endif %}
+    {% endfor %}
+  </fd-selector>
+  <span class="fdic-control-fallback" data-fdic-control-fallback-for="{{ control_id }}">
+    {% set fallback_attributes = attributes.removeClass('fdic-form-control') %}
+    {% if control_id %}
+      {% set fallback_attributes = fallback_attributes.setAttribute('id', control_id ~ '--native') %}
+    {% endif %}
+    <select{{ fallback_attributes }}>
+      {% for option in options %}
+        {% if option.type == 'option' %}
+          <option value="{{ option.value }}"{{ option.selected ? ' selected' }}>{{ option.label }}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+  </span>
+{% endif %}
+{{ children }}

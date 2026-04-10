@@ -1,0 +1,24 @@
+{#
+/**
+ * @file
+ * Theme override for breadcrumb navigation.
+ */
+#}
+{% if breadcrumb %}
+  <nav class="fdic-breadcrumb" role="navigation" aria-labelledby="fdic-breadcrumb-heading">
+    <h2 id="fdic-breadcrumb-heading" class="fdic-visually-hidden">{{ 'Breadcrumb'|t }}</h2>
+    <ol class="fdic-breadcrumb__list">
+      {% for item in breadcrumb %}
+        <li class="fdic-breadcrumb__item">
+          {% if item.url %}
+            <fd-link>
+              <a href="{{ item.url }}">{{ item.text }}</a>
+            </fd-link>
+          {% else %}
+            {{ item.text }}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </nav>
+{% endif %}

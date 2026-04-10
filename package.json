@@ -1,0 +1,26 @@
+{
+  "name": "fdic-drupal-theme",
+  "private": true,
+  "scripts": {
+    "test:php": "php -l fdic.theme",
+    "test:yaml": "yamllint fdic.info.yml fdic.libraries.yml fdic.breakpoints.yml config/install/fdic.settings.yml && node -e \"const fs = require('node:fs'); const files = ['fdic.info.yml', 'fdic.libraries.yml', 'fdic.breakpoints.yml', 'config/install/fdic.settings.yml']; let failed = false; for (const file of files) { fs.readFileSync(file, 'utf8').split(/\\r?\\n/).forEach((line, index) => { if (/[ \\t]$/.test(line)) { failed = true; console.error(file + ':' + (index + 1) + ': trailing whitespace'); } }); } if (failed) process.exit(1);\"",
+    "test:css": "stylelint css/theme.css",
+    "test:js": "eslint js/",
+    "test:twig": "node -e \"Promise.all([import('fast-glob'), import('twig'), import('node:fs/promises')]).then(async ([{ default: fg }, TwigModule, fs]) => { const Twig = TwigModule.default ?? TwigModule; const files = await fg('templates/**/*.html.twig'); let failed = false; for (const file of files) { try { Twig.twig({ path: file, data: await fs.readFile(file, 'utf8') }); } catch (error) { failed = true; console.error(file + ': ' + error.message); } } if (failed) process.exit(1); })\"",
+    "test": "npm run test:php && npm run test:yaml && npm run test:css && npm run test:js && npm run test:twig"
+  },
+  "dependencies": {
+    "@fdic-ds/components": "^0.1.0",
+    "@fdic-ds/tokens": "^0.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "fast-glob": "^3.3.3",
+    "globals": "^15.0.0",
+    "stylelint": "^16.0.0",
+    "stylelint-config-standard": "^36.0.0",
+    "twig": "^1.17.1",
+    "yaml-lint": "^1.7.0"
+  }
+}

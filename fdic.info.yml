@@ -1,0 +1,28 @@
+name: FDIC
+type: theme
+description: 'Drupal 10+ theme consuming the FDIC Design System web components and tokens.'
+core_version_requirement: ^10 || ^11
+base theme: false
+logo: logo.svg
+
+libraries:
+  - fdic/tokens
+  - fdic/components
+  - fdic/theme
+
+libraries-override:
+  system/base: false
+  stable9/base: false
+  stable9/messages: false
+  stable9/node: false
+
+regions:
+  header: Header
+  content: Content
+  sidebar_first: 'Sidebar first'
+  sidebar_second: 'Sidebar second'
+  footer: Footer
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+  breadcrumb: Breadcrumb
+  highlighted: Highlighted

@@ -1,0 +1,45 @@
+# Load semantic design tokens first so component styles and theme overrides can
+# resolve DS custom properties without a build step.
+tokens:
+  css:
+    base:
+      # semantic.css imports interaction.css automatically.
+      node_modules/@fdic-ds/tokens/semantic.css: {}
+
+# Register the DS custom elements globally after tokens are available.
+components:
+  js:
+    node_modules/@fdic-ds/components/dist/register/register-all.js:
+      attributes:
+        type: module
+  dependencies:
+    - fdic/tokens
+
+# Header-specific adapter code stays separate so it only loads on header markup.
+# fdic_preprocess_html() also exposes this adapter path through an import map
+# for js/global-header-init.js's bare module specifier.
+global-header:
+  js:
+    node_modules/@fdic-ds/components/dist/fd-global-header-drupal.js:
+      attributes:
+        type: module
+    js/global-header-init.js:
+      attributes:
+        type: module
+  dependencies:
+    - fdic/components
+
+# Theme glue CSS consumes DS tokens and styles Drupal-specific layout/templates.
+theme:
+  js:
+    js/form-fallback-init.js:
+      attributes:
+        type: module
+    js/pagination-init.js:
+      attributes:
+        type: module
+  css:
+    theme:
+      css/theme.css: {}
+  dependencies:
+    - fdic/components

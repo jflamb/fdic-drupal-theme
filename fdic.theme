@@ -1,0 +1,387 @@
+<?php
+
+/**
+ * @file
+ * Theme hooks and preprocessors for the FDIC theme.
+ */
+
+use Drupal\Component\Serialization\Json;
+use Drupal\Core\Render\Markup;
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function fdic_preprocess_html(array &$variables): void {
+  $variables['html_attributes']['class'][] = 'no-js';
+
+  $script = "document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');";
+  $variables['page']['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      // Safe: this no-js/js toggle is a static string with no user input.
+      '#value' => Markup::create($script),
+      '#weight' => -1000,
+    ],
+    'fdic_js_class_toggle',
+  ];
+
+  $variables['page']['#attached']['html_head'][] = [
+    [
+      '#tag' => 'script',
+      '#attributes' => [
+        'type' => 'importmap',
+      ],
+      '#value' => Markup::create(Json::encode([
+        'imports' => [
+          '@fdic-ds/components/fd-global-header-drupal' => fdic_theme_asset_url('node_modules/@fdic-ds/components/dist/fd-global-header-drupal.js'),
+        ],
+      ])),
+    ],
+    'fdic_design_system_importmap',
+  ];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function fdic_preprocess_page(array &$variables): void {
+  if (!isset($variables['page']['header'])) {
+    return;
+  }
+
+  $header_source = fdic_build_header_source_data();
+  $variables['page']['header']['#fdic_main_menu'] = $header_source['menu'];
+  $variables['page']['header']['#fdic_header_search'] = $header_source['search'];
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for region.html.twig.
+ */
+function fdic_preprocess_region(array &$variables): void {
+  if (($variables['region'] ?? '') === 'header') {
+    if (isset($variables['elements']['#fdic_main_menu'], $variables['elements']['#fdic_header_search'])) {
+      $variables['fdic_main_menu'] = $variables['elements']['#fdic_main_menu'];
+      $variables['fdic_header_search'] = $variables['elements']['#fdic_header_search'];
+      return;
+    }
+
+    $header_source = fdic_build_header_source_data();
+    $variables['fdic_main_menu'] = $header_source['menu'];
+    $variables['fdic_header_search'] = $header_source['search'];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for input.html.twig.
+ */
+function fdic_preprocess_input(array &$variables): void {
+  $element = $variables['element'] ?? [];
+  $variables['fdic_input_type'] = $element['#attributes']['type'] ?? $element['#type'] ?? 'text';
+  $variables['fdic_button_label'] = $element['#value'] ?? $element['#attributes']['value'] ?? NULL;
+  $variables['fdic_input_id'] = $element['#id'] ?? '';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for textarea.html.twig.
+ */
+function fdic_preprocess_textarea(array &$variables): void {
+  $element = $variables['element'] ?? [];
+  $variables['fdic_textarea_id'] = $element['#id'] ?? '';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for select.html.twig.
+ */
+function fdic_preprocess_select(array &$variables): void {
+  $element = $variables['element'] ?? [];
+  $variables['fdic_select_label'] = fdic_render_plain_text($element['#title'] ?? '');
+  $variables['fdic_select_id'] = $element['#id'] ?? '';
+  $variables['fdic_select_multiple'] = !empty($element['#multiple']);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for pager.html.twig.
+ */
+function fdic_preprocess_pager(array &$variables): void {
+  $element = $variables['pager']['#element'] ?? NULL;
+  if ($element === NULL) {
+    return;
+  }
+
+  $pager = \Drupal::service('pager.manager')->getPager($element);
+  if ($pager === NULL) {
+    return;
+  }
+
+  $variables['fdic_total_pages'] = $pager->getTotalPages();
+
+  // Drupal pager links are 1-indexed in template labels but 0-indexed in the
+  // ?page= query parameter. fd-pagination consumes the template as 1-indexed;
+  // js/pagination-init.js adapts clicks back to Drupal's 0-indexed URL.
+  $items = $variables['items'] ?? [];
+  if (!empty($items['pages'])) {
+    foreach ($items['pages'] as $page_num => $page_item) {
+      if (empty($page_item['href'])) {
+        continue;
+      }
+
+      $zero_indexed = $page_num - 1;
+      $variables['fdic_pager_href_template'] = str_replace(
+        'page=' . $zero_indexed,
+        'page={page}',
+        (string) $page_item['href']
+      );
+      break;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for form-element--checkbox.html.twig.
+ */
+function fdic_preprocess_form_element__checkbox(array &$variables): void {
+  fdic_prepare_choice_control_attributes($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for form-element--radio.html.twig.
+ */
+function fdic_preprocess_form_element__radio(array &$variables): void {
+  fdic_prepare_choice_control_attributes($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for checkboxes.html.twig.
+ */
+function fdic_preprocess_checkboxes(array &$variables): void {
+  fdic_prepare_choice_group_variables($variables);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for radios.html.twig.
+ */
+function fdic_preprocess_radios(array &$variables): void {
+  fdic_prepare_choice_group_variables($variables);
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function fdic_page_attachments_alter(array &$attachments): void {
+  if (empty($attachments['#attached']['html_head'])) {
+    return;
+  }
+
+  foreach ($attachments['#attached']['html_head'] as $key => $attachment) {
+    if (!is_array($attachment) || empty($attachment[1])) {
+      continue;
+    }
+
+    // The theme owns the viewport declaration in html.html.twig so the value is
+    // visible in one place and can be reviewed with the document shell.
+    if ($attachment[1] === 'system_meta_viewport') {
+      unset($attachments['#attached']['html_head'][$key]);
+    }
+  }
+}
+
+/**
+ * Builds a JSON-serializable menu tree for DS Drupal header adapters.
+ */
+function fdic_build_menu_tree_data(string $menu_name): array {
+  $menu_tree = \Drupal::menuTree();
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+  $tree = $menu_tree->load($menu_name, $parameters);
+  $manipulators = [
+    ['callable' => 'menu.default_tree_manipulators:checkAccess'],
+    ['callable' => 'menu.default_tree_manipulators:generateIndexAndSort'],
+  ];
+  $tree = $menu_tree->transform($tree, $manipulators);
+
+  return fdic_serialize_menu_tree($tree);
+}
+
+/**
+ * Serializes a menu tree into DrupalMenuLinkLike-compatible arrays.
+ */
+function fdic_serialize_menu_tree(array $tree): array {
+  $items = [];
+
+  foreach ($tree as $element) {
+    if (empty($element->access) || !$element->access->isAllowed()) {
+      continue;
+    }
+
+    $link = $element->link;
+    $url_object = $link->getUrlObject();
+    $url = $url_object->isRouted() && $url_object->getRouteName() === '<nolink>'
+      ? ''
+      : $url_object->toString();
+
+    $item = [
+      'title' => $link->getTitle(),
+      'url' => $url,
+      'current' => fdic_menu_url_is_current($url_object),
+      'below' => fdic_serialize_menu_tree($element->subtree),
+    ];
+
+    $description = $link->getDescription();
+    if ($description !== '') {
+      $item['description'] = $description;
+    }
+
+    $options = $url_object->getOptions();
+    if (!empty($options['attributes']['aria-label'])) {
+      $item['ariaLabel'] = $options['attributes']['aria-label'];
+    }
+
+    $plugin_definition = $link->getPluginDefinition();
+    $menu_link_id = $link->getPluginId();
+    if ($menu_link_id !== '') {
+      $item['id'] = $menu_link_id;
+    }
+
+    if (!empty($plugin_definition['metadata']['keywords'])) {
+      $item['keywords'] = $plugin_definition['metadata']['keywords'];
+    }
+
+    if (!empty($options['attributes']['data-overview-title'])) {
+      $item['overviewTitle'] = $options['attributes']['data-overview-title'];
+    }
+
+    if (!empty($options['attributes']['data-overview-url'])) {
+      $item['overviewUrl'] = $options['attributes']['data-overview-url'];
+    }
+
+    $items[] = $item;
+  }
+
+  return $items;
+}
+
+/**
+ * Builds header data shared by page and header-region preprocessors.
+ */
+function fdic_build_header_source_data(): array {
+  return [
+    'menu' => fdic_build_menu_tree_data('main'),
+    'search' => [
+      'action' => theme_get_setting('header_search_action') ?: '/search',
+      'paramName' => theme_get_setting('header_search_param_name') ?: 'keys',
+      'placeholder' => theme_get_setting('header_search_placeholder') ?: t('Search FDIC'),
+    ],
+  ];
+}
+
+/**
+ * Determines whether a menu URL points at the current route.
+ */
+function fdic_menu_url_is_current(Url $url): bool {
+  if (!$url->isRouted()) {
+    return FALSE;
+  }
+
+  $route_match = \Drupal::routeMatch();
+  if ($url->getRouteName() !== $route_match->getRouteName()) {
+    return FALSE;
+  }
+
+  return $url->getRouteParameters() == $route_match->getRawParameters()->all();
+}
+
+/**
+ * Builds a root-relative URL for a theme asset.
+ */
+function fdic_theme_asset_url(string $path): string {
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('fdic');
+
+  return base_path() . $theme_path . '/' . ltrim($path, '/');
+}
+
+/**
+ * Builds host attributes for form-associated choice custom elements.
+ *
+ * @internal
+ */
+function fdic_prepare_choice_control_attributes(array &$variables): void {
+  $element = $variables['element'] ?? [];
+  $attributes = new Attribute($element['#attributes'] ?? []);
+  $control_id = $element['#id'] ?? '';
+
+  if ($control_id !== '') {
+    $attributes->setAttribute('id', $control_id);
+  }
+
+  if (!empty($element['#name'])) {
+    $attributes->setAttribute('name', $element['#name']);
+  }
+
+  if (array_key_exists('#return_value', $element)) {
+    $attributes->setAttribute('value', $element['#return_value']);
+  }
+  elseif (array_key_exists('#value', $element) && is_scalar($element['#value'])) {
+    $attributes->setAttribute('value', $element['#value']);
+  }
+
+  if (!empty($element['#checked'])) {
+    $attributes->setAttribute('checked', 'checked');
+  }
+
+  if (!empty($element['#disabled'])) {
+    $attributes->setAttribute('disabled', 'disabled');
+  }
+
+  if (!empty($element['#required'])) {
+    $attributes->setAttribute('required', 'required');
+  }
+
+  $variables['fdic_control_attributes'] = $attributes->addClass('fdic-form-control');
+
+  if ($control_id === '') {
+    $variables['fdic_fallback_id'] = '';
+    $variables['fdic_fallback_children'] = $variables['children'] ?? '';
+    return;
+  }
+
+  $fallback_id = $control_id . '--native';
+  $fallback_children = str_replace(
+    'id="' . $control_id . '"',
+    'id="' . $fallback_id . '"',
+    (string) ($variables['children'] ?? '')
+  );
+  $variables['fdic_fallback_id'] = $fallback_id;
+  $variables['fdic_fallback_children'] = Markup::create($fallback_children);
+}
+
+/**
+ * Prepares label, state, and message values for choice groups.
+ *
+ * @internal
+ */
+function fdic_prepare_choice_group_variables(array &$variables): void {
+  $element = $variables['element'] ?? [];
+  $variables['fdic_group_label'] = fdic_render_plain_text($element['#title'] ?? '');
+  $variables['fdic_group_description'] = fdic_render_plain_text($element['#description'] ?? '');
+  $variables['fdic_group_error'] = fdic_render_plain_text($element['#errors'] ?? '');
+  $variables['fdic_group_required'] = !empty($element['#required']);
+  $variables['fdic_group_disabled'] = !empty($element['#disabled']);
+}
+
+/**
+ * Converts scalar, stringable, or render-array values to plain text.
+ *
+ * @internal
+ */
+function fdic_render_plain_text(mixed $value): string {
+  if (is_array($value)) {
+    $value = \Drupal::service('renderer')->renderPlain($value);
+  }
+
+  if (is_scalar($value) || (is_object($value) && method_exists($value, '__toString'))) {
+    return trim(strip_tags((string) $value));
+  }
+
+  return '';
+}

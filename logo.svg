@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="120" viewBox="0 0 240 120" role="img" aria-labelledby="title desc">
+  <title id="title">FDIC theme logo</title>
+  <desc id="desc">A simple FDIC Drupal theme mark.</desc>
+  <rect width="240" height="120" fill="#f7f9fb"/>
+  <rect x="16" y="16" width="208" height="88" rx="8" fill="#ffffff" stroke="#005ea8" stroke-width="4"/>
+  <text x="120" y="70" text-anchor="middle" font-family="'Source Sans 3', 'Source Sans Pro', Arial, sans-serif" font-size="34" font-weight="700" fill="#1278b0">FDIC</text>
+</svg>

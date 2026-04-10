@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Theme override to display a node.
+ */
+#}
+{% set classes = [
+  'node',
+  'node--type-' ~ node.bundle|clean_class,
+  node.isPromoted() ? 'node--promoted',
+  node.isSticky() ? 'node--sticky',
+  not node.isPublished() ? 'node--unpublished',
+  view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+] %}
+{% set prose_view_modes = ['full', 'default', 'rss'] %}
+{% set prose_types = ['article', 'page'] %}
+{% set use_prose = node.bundle in prose_types and view_mode in prose_view_modes %}
+
+<article{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if not page %}
+    <h2{{ title_attributes }}>
+      <a href="{{ url }}" rel="bookmark">{{ label }}</a>
+    </h2>
+  {% else %}
+    <fd-page-header heading="{{ label|render|striptags|trim }}"></fd-page-header>
+  {% endif %}
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <footer class="node__meta">
+      {{ author_picture }}
+      <div{{ author_attributes.addClass('node__submitted') }}>
+        {{ submitted }}
+      </div>
+    </footer>
+  {% endif %}
+
+  <div{{ content_attributes.addClass('node__content', use_prose ? ['prose', 'fdic-prose']) }}>
+    {{ content }}
+  </div>
+</article>
