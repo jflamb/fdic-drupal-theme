@@ -149,6 +149,7 @@ link_theme() {
   local theme_root="../../../../.."
   local paths=(
     "config"
+    "assets"
     "css"
     "js"
     "templates"

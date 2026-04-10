@@ -309,6 +309,24 @@ fd-pagination:not(:defined) {
   max-width: none;
 }
 
+.fdic-global-header__brand-link {
+  display: inline-flex;
+  align-items: center;
+  height: 35px;
+  color: var(--ds-color-text-inverted, #fff);
+  text-decoration: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.fdic-global-header__brand-image {
+  display: block;
+  width: 8.75rem;
+  height: auto;
+  border-radius: 0;
+  overflow: visible;
+}
+
 .fdicnet-page-header {
   --fd-page-header-bg:
     linear-gradient(90deg, oklch(from var(--ds-color-primary-900, #05314f) l c h / 96%), oklch(from var(--ds-color-primary-900, #05314f) l c h / 72%)),

@@ -55,6 +55,7 @@ main() {
 
   local linked_paths=(
     "config"
+    "assets"
     "css"
     "js"
     "templates"

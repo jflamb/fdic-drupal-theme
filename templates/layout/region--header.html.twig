@@ -43,6 +43,20 @@
   }
 } %}
 
-<fd-global-header data-fdic-global-header>
+<fd-global-header data-fdic-global-header shy>
+  <a slot="brand" class="fdic-global-header__brand-link" href="{{ path('<front>') }}" aria-label="{{ 'FDICnet home'|t }}">
+    <img
+      class="fdic-global-header__brand-image"
+      src="/{{ directory }}/assets/fdicnet-wordmark.svg"
+      alt="{{ 'FDICnet'|t }}"
+      width="140"
+      height="35">
+  </a>
+  <fd-button slot="utility" variant="subtle-inverted" aria-label="{{ 'Apps'|t }}" type="button">
+    <fd-icon slot="icon-start" name="squares-four" aria-hidden="true" style="--fd-icon-size:1.75rem;"></fd-icon>
+  </fd-button>
+  <fd-button slot="utility" variant="subtle-inverted" aria-label="{{ 'Profile'|t }}" type="button">
+    <fd-icon slot="icon-start" name="user-circle" aria-hidden="true" style="--fd-icon-size:1.75rem;"></fd-icon>
+  </fd-button>
   <script type="application/json" data-fdic-global-header-source>{{ header_source|json_encode(constant('JSON_HEX_TAG'))|raw }}</script>
 </fd-global-header>
