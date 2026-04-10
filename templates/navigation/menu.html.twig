@@ -20,7 +20,7 @@
     {% for item in items %}
       <li{{ item.attributes.addClass('fdic-menu__item') }}>
         <fd-link>
-          {{ link(item.title, item.url, item.link_attributes.addClass('fdic-menu__link')) }}
+          {{ link(item.title, item.url, {'class': ['fdic-menu__link']}) }}
         </fd-link>
         {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
       </li>

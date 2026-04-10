@@ -1,0 +1,29 @@
+# DDEV-generated files — do not commit.
+# Tracked files are whitelisted below. If you add custom DDEV hooks,
+# nginx/apache snippets, Docker Compose overrides, or commands under
+# .ddev/, add them to the whitelist here.
+*
+!.gitignore
+!config.yaml
+!commands/
+!commands/**
+!docker-compose.*.yaml
+!nginx_full/
+!nginx_full/**
+!apache/
+!apache/**
+apache/README*.txt
+apache/*.example
+apache/apache-site.conf
+!php/
+!php/**
+php/README.txt
+php/*.example
+!web-build/
+!web-build/**
+web-build/README.txt
+web-build/*.example
+commands/*/README.txt
+nginx_full/README*.txt
+nginx_full/*.example
+nginx_full/nginx-site.conf

@@ -1,6 +1,9 @@
 # Dependencies
 node_modules
 
+# Generated Drupal site (created by scripts/bootstrap.sh)
+drupal/
+
 # Package manager logs
 npm-debug.log*
 yarn-debug.log*

@@ -10,8 +10,8 @@
     "test": "npm run test:php && npm run test:yaml && npm run test:css && npm run test:js && npm run test:twig"
   },
   "dependencies": {
-    "@fdic-ds/components": "^0.1.0",
-    "@fdic-ds/tokens": "^0.1.0"
+    "@fdic-ds/components": "npm:@jflamb/fdic-ds-components@^0.1.0",
+    "@fdic-ds/tokens": "npm:@jflamb/fdic-ds-tokens@^0.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
