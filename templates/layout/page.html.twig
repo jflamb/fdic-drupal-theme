@@ -13,19 +13,6 @@
   {{ page.header }}
 
   {% if is_front %}
-    <fd-page-header
-      class="fdicnet-page-header"
-      heading="{{ 'Good morning, Amy'|t }}"
-      kicker="{{ 'Washington, DC | 76F | Mostly Sunny'|t }}">
-    </fd-page-header>
-    <nav class="fdicnet-section-nav" aria-label="{{ 'FDICnet sections'|t }}">
-      <a href="#news">{{ 'News & Events'|t }}</a>
-      <a href="#career">{{ 'Career Development & Training'|t }}</a>
-      <a href="#knowledge">{{ 'Knowledge Base'|t }}</a>
-      <a href="#benefits">{{ 'Benefits'|t }}</a>
-      <a href="#services">{{ 'Employee Services'|t }}</a>
-      <a href="#about">{{ 'About'|t }}</a>
-    </nav>
   {% endif %}
 
   {% if page.breadcrumb %}

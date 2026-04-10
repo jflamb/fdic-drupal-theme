@@ -9,6 +9,9 @@ tokens:
 # Register the DS custom elements globally after tokens are available.
 components:
   js:
+    js/custom-icons.js:
+      attributes:
+        type: module
     node_modules/@fdic-ds/components/dist/register/register-all.js:
       attributes:
         type: module
