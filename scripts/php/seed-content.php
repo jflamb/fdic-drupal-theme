@@ -64,7 +64,7 @@ function _fdic_seed_ensure_node(string $type, string $title, string $body, array
 
   $node->set('body', [
     'value' => $body,
-    'format' => 'basic_html',
+    'format' => $options['format'] ?? 'basic_html',
   ]);
   $node->setOwnerId(_fdic_seed_owner_id());
   $node->setPublished(TRUE);
@@ -85,26 +85,152 @@ function _fdic_seed_set_front_page(Node $node): void {
     ->save();
 }
 
-$home = _fdic_seed_ensure_node('page', "$marker: Home",
-  '<p><strong>FDIC Theme Dev</strong> is a disposable Drupal site for developing and reviewing the FDIC Drupal theme against real Drupal output.</p>'
-  . '<p><a href="/node">Browse the article listing</a> or review <a href="/node?page=1">the second listing page</a> and node pages rendered by the standard profile.</p>'
-  . '<h2>Depositor confidence starts with clear service design</h2>'
-  . '<p>The example content uses standard Drupal page and article nodes, body fields, links, headings, ordered and unordered lists, and default node metadata so theme changes can be reviewed in context.</p>'
-  . '<h3>What this page covers</h3>'
-  . '<ul>'
-  . '<li>Page title and body field rendering</li>'
-  . '<li>Breadcrumb and system message block placement</li>'
-  . '<li>FDIC Design System CSS, JavaScript, and web component assets</li>'
-  . '<li>Progressive enhancement fallbacks for Drupal markup</li>'
-  . '</ul>'
-  . '<h3>Common user tasks</h3>'
-  . '<ol>'
-  . '<li>Confirm deposit insurance coverage.</li>'
-  . '<li>Find supervision and consumer protection resources.</li>'
-  . '<li>Read research, reports, and public updates.</li>'
-  . '</ol>',
-  ['promoted' => FALSE, 'sticky' => TRUE]
-);
+$home_body = <<<'HTML'
+<div class="fdicnet-home">
+  <header class="fdicnet-hero" aria-labelledby="fdicnet-home-title">
+    <div class="fdicnet-hero__inner">
+      <p class="fdicnet-hero__eyebrow">Washington, DC | 76F | Mostly Sunny</p>
+      <h1 id="fdicnet-home-title">Good morning, Amy</h1>
+    </div>
+    <nav class="fdicnet-section-nav" aria-label="FDICnet sections">
+      <a href="#news">News &amp; Events</a>
+      <a href="#career">Career Development &amp; Training</a>
+      <a href="#knowledge">Knowledge Base</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#services">Employee Services</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <section id="news" class="fdicnet-section fdicnet-news" aria-labelledby="fdicnet-news-title">
+    <div class="fdicnet-news__feature">
+      <h2 id="fdicnet-news-title">Featured Story</h2>
+      <div class="fdicnet-story">
+        <div class="fdicnet-story__visual" role="img" aria-label="Illustrated FDIC briefing room scene"></div>
+        <div class="fdicnet-story__copy">
+          <h3><a href="/node">Travis Hill sworn in as the 23rd FDIC Chairman</a></h3>
+          <p class="fdicnet-meta">January 13, 2026 | FDICNews | Leadership</p>
+          <p>Chairman Hill has served as Acting Chairman of the FDIC Board since January 2025. This sample story demonstrates a feature article treatment for a rendered Drupal snapshot.</p>
+        </div>
+      </div>
+
+      <div class="fdicnet-latest">
+        <h2>Latest News</h2>
+        <h3><a href="/node">FDIC launches readiness initiative for cross-divisional teams</a></h3>
+        <p class="fdicnet-meta">January 29, 2026 | FDICNews</p>
+        <p>Teams across the agency are preparing updated playbooks for resolution readiness, stakeholder communications, and employee support.</p>
+        <p class="fdicnet-more"><a href="/node">More News</a></p>
+      </div>
+    </div>
+
+    <aside class="fdicnet-news__messages" aria-labelledby="fdicnet-messages-title">
+      <h2 id="fdicnet-messages-title">Global Messages</h2>
+      <ul class="fdicnet-message-list">
+        <li><a href="/node">Occupant Emergency Plan March 2026 Training: Register Today</a><span>February 12, 2026 | FDIC-Wide</span></li>
+        <li><a href="/node">Update on Telework Agreements</a><span>February 11, 2026 | FDIC-Wide</span></li>
+        <li><a href="/node">Walk for Peace</a><span>February 8, 2026 | FDIC-Wide</span></li>
+        <li><a href="/node">Headquarters Theater Advisory for Friday, February 6, 2026</a><span>February 6, 2026 | FDIC-Wide</span></li>
+        <li><a href="/node">FDIC Headquarters Operating Status for Wednesday, February 4, 2026</a><span>February 4, 2026 | FDIC-Wide</span></li>
+        <li><a href="/node">2026 Mandatory and Required Training</a><span>February 2, 2026 | FDIC-Wide</span></li>
+      </ul>
+      <p class="fdicnet-more"><a href="/node">More Messages</a></p>
+    </aside>
+  </section>
+
+  <section id="benefits" class="fdicnet-section fdicnet-featured-links" aria-labelledby="fdicnet-featured-links-title">
+    <h2 id="fdicnet-featured-links-title">Featured Links</h2>
+    <div class="fdicnet-featured-links__grid">
+      <a class="fdicnet-featured-link" href="/node"><span aria-hidden="true">PM</span><strong>Performance Management</strong><small>Employee performance management program</small></a>
+      <a class="fdicnet-featured-link" href="/node"><span aria-hidden="true">DO</span><strong>Divisions &amp; Offices</strong><small>Browse all FDIC divisions and offices</small></a>
+      <a class="fdicnet-featured-link" href="/node"><span aria-hidden="true">AD</span><strong>Approved Directives</strong><small>View official, current FDIC directives and policy issuances</small></a>
+      <a class="fdicnet-featured-link" href="/node"><span aria-hidden="true">RD</span><strong>RD Memos</strong><small>Access memoranda issued by Regional Directors</small></a>
+      <a class="fdicnet-featured-link" href="/node"><span aria-hidden="true">TE</span><strong>Travel &amp; Expense</strong><small>Submit and manage travel authorizations and expense reimbursements</small></a>
+      <a class="fdicnet-featured-link" href="/node"><span aria-hidden="true">CM</span><strong>Cafeteria Menus</strong><small>Food and beverage choices for a better work day</small></a>
+    </div>
+  </section>
+
+  <section id="services" class="fdicnet-section fdicnet-link-categories" aria-label="Employee utility links">
+    <div class="fdicnet-link-category">
+      <h2>Corporate Applications</h2>
+      <ul>
+        <li><a href="/node">GovTA</a></li>
+        <li><a href="/node">CHRIS</a></li>
+        <li><a href="/node">ARCS</a></li>
+        <li><a href="/node">Employee Center</a></li>
+        <li><a href="/node">Federal Employee Health Benefits (FEHB)</a></li>
+      </ul>
+    </div>
+    <div id="knowledge" class="fdicnet-link-category">
+      <h2>Examiner Tools</h2>
+      <ul>
+        <li><a href="/node">ViSION</a></li>
+        <li><a href="/node">Risk Examination Support</a></li>
+        <li><a href="/node">Examinations Resources</a></li>
+        <li><a href="/node">Compliance Examination Manual</a></li>
+        <li><a href="/node">Community Reinvestment Act</a></li>
+      </ul>
+    </div>
+    <div id="career" class="fdicnet-link-category">
+      <h2>Training &amp; Onboarding</h2>
+      <ul>
+        <li><a href="/node">Mandatory Training</a></li>
+        <li><a href="/node">Examiner Learning Program</a></li>
+        <li><a href="/node">Professional Learning Account (PLA)</a></li>
+        <li><a href="/node">LinkedIn Learning</a></li>
+        <li><a href="/node">ELX</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="fdicnet-section fdicnet-events" aria-labelledby="fdicnet-events-title">
+    <h2 id="fdicnet-events-title">Upcoming Events</h2>
+    <div class="fdicnet-events__grid">
+      <article class="fdicnet-event">
+        <time datetime="2026-02-19"><span>Feb</span><strong>19</strong></time>
+        <div><h3><a href="/node">Eileen Vidrine on the Human Component of AI</a></h3><p>FDIC-Wide, CIO, DIT | Webinar</p></div>
+      </article>
+      <article class="fdicnet-event">
+        <time datetime="2026-02-20"><span>Feb</span><strong>20</strong></time>
+        <div><h3><a href="/node">Planned eFOS+ Outage</a></h3><p>FDIC-Wide</p></div>
+      </article>
+      <article class="fdicnet-event">
+        <time datetime="2026-02-24"><span>Feb</span><strong>24</strong></time>
+        <div><h3><a href="/node">Section 508 Document Remediation Session (PPT/Excel)</a></h3><p>FDIC-Wide | Training</p></div>
+      </article>
+    </div>
+    <p class="fdicnet-more"><a href="/node">More Events</a></p>
+  </section>
+
+  <section class="fdicnet-section fdicnet-people-social" aria-label="Employee spotlight and social updates">
+    <article class="fdicnet-spotlight">
+      <h2>Employee Spotlight</h2>
+      <div class="fdicnet-person">
+        <div class="fdicnet-avatar" aria-hidden="true">AH</div>
+        <div><h3>Alex Harrison</h3><p>Digital Media Specialist, Office of Communications</p></div>
+      </div>
+      <p>Alex has brought a systematic approach and strategic focus to the FDIC's digital communication infrastructure and content. Through rigorous data analysis of subscription patterns and engagement metrics, he identified inefficiencies and gaps in how the FDIC reaches its audiences.</p>
+    </article>
+
+    <article class="fdicnet-social">
+      <h2>FDIC on Social</h2>
+      <div class="fdicnet-social__content">
+        <div>
+          <p>Read Acting Chairman Travis Hill's statement on Executive Order, "Guaranteeing Fair Banking For All Americans."</p>
+          <p><a href="https://www.fdic.gov/news/press-releases/2025">fdic.gov/news/press-releases/2025</a></p>
+          <p class="fdicnet-meta">Posted Aug. 8, 2025 on Facebook and YouTube</p>
+        </div>
+        <div class="fdicnet-social-card" aria-hidden="true"><span>Guaranteeing Fair Banking For All Americans</span><strong>FDIC</strong></div>
+      </div>
+    </article>
+  </section>
+</div>
+HTML;
+
+$home = _fdic_seed_ensure_node('page', "$marker: Home", $home_body, [
+  'promoted' => FALSE,
+  'sticky' => TRUE,
+  'format' => 'full_html',
+]);
 _fdic_seed_set_front_page($home);
 
 _fdic_seed_ensure_node('page', "$marker: About This Site",

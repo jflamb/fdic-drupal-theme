@@ -139,8 +139,8 @@ function rewriteHtml(html, currentUrl, currentOutput) {
     }
 
     const mappedPage = pageMap.get(pageKey(targetUrl));
-    if (attr.toLowerCase() === 'href' && mappedPage) {
-      return ` ${attr}="${relativeReference(currentOutput, mappedPage)}"`;
+    if ((attr.toLowerCase() === 'href' || attr.toLowerCase() === 'action') && mappedPage) {
+      return ` ${attr}="${relativeReference(currentOutput, mappedPage)}${targetUrl.hash}"`;
     }
 
     if (attr.toLowerCase() === 'href') {

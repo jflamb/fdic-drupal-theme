@@ -279,6 +279,682 @@ fd-pagination:not(:defined) {
   max-width: 70ch;
 }
 
+.fdic-site-header {
+  color: var(--ds-color-text-inverted, #fff);
+  background: var(--ds-color-bg-brand, #05314f);
+}
+
+.fdic-site-header__masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  width: min(100% - 2rem, 82rem);
+  min-height: 5.75rem;
+  margin-inline: auto;
+}
+
+.fdic-site-header__wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  color: inherit;
+  text-decoration: none;
+}
+
+.fdic-site-header__fdic {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.fdic-site-header__net {
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.fdic-site-header__search {
+  position: relative;
+  width: min(100%, 18rem);
+}
+
+.fdic-site-header__search::before {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 0.75rem;
+  color: var(--ds-color-text-secondary, #565c65);
+  content: "Search";
+  font-size: 0.75rem;
+  line-height: 1;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.fdic-site-header__search input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 3.5rem;
+  border: 1px solid var(--ds-color-border-input, #8d9297);
+  border-radius: 0;
+  color: var(--fdic-text-primary, #212123);
+  background: var(--ds-color-bg-input, #fff);
+  font: inherit;
+}
+
+.fdic-site-header__nav {
+  display: flex;
+  gap: 1.5rem;
+  width: min(100% - 2rem, 82rem);
+  margin-inline: auto;
+  overflow-x: auto;
+  border-block-start: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 20%);
+}
+
+.fdic-site-header__nav a {
+  flex: 0 0 auto;
+  padding-block: 0.75rem;
+  color: inherit;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.fdic-page--front .fdic-breadcrumb-region,
+.fdic-page--front .block-system-breadcrumb-block,
+.fdic-page--front .node__content > .field {
+  margin: 0;
+}
+
+.fdic-page--front .block-page-title-block {
+  display: none;
+}
+
+.fdic-page--front .fdic-main-layout {
+  width: 100%;
+  max-width: none;
+  padding-block: 0;
+}
+
+.fdic-page--front .fdic-content-region,
+.fdic-page--front .node__content,
+.fdic-page--front .fdic-prose {
+  padding-block: 0;
+}
+
+.fdic-page--front .fdic-prose > * + * {
+  margin-block-start: 0;
+}
+
+.fdic-page--front .fdic-prose :where(p, ul, ol, dl, blockquote) {
+  max-width: none;
+}
+
+.fdicnet-home {
+  --fdicnet-max: 82rem;
+  --fdicnet-blue-deep: var(--ds-color-primary-900, #05314f);
+  --fdicnet-blue: var(--ds-color-primary-500, #0d6191);
+  --fdicnet-blue-soft: var(--ds-color-primary-050, #e7f6fd);
+  --fdicnet-gold-soft: var(--ds-color-secondary-050, #fbf4df);
+  --fdicnet-gold: var(--ds-color-secondary-500, #d9af45);
+
+  color: var(--fdic-text-primary, #212123);
+}
+
+.fdicnet-hero {
+  color: var(--ds-color-text-inverted, #fff);
+  background:
+    linear-gradient(90deg, oklch(from var(--fdicnet-blue-deep) l c h / 96%), oklch(from var(--fdicnet-blue-deep) l c h / 72%)),
+    linear-gradient(135deg, transparent 0 52%, oklch(from var(--ds-color-primary-400, #38b6ff) l c h / 38%) 52% 54%, transparent 54%),
+    repeating-linear-gradient(90deg, oklch(from var(--ds-color-neutral-000, #fff) l c h / 6%) 0 1px, transparent 1px 8rem),
+    linear-gradient(160deg, var(--ds-color-primary-800, #074c76), var(--ds-color-primary-900, #05314f));
+}
+
+.fdicnet-hero__inner {
+  display: grid;
+  align-content: end;
+  width: min(100% - 2rem, var(--fdicnet-max));
+  min-height: 8.25rem;
+  margin-inline: auto;
+  padding-block: 2rem 1.25rem;
+}
+
+.fdicnet-hero__eyebrow {
+  margin: 0 0 0.25rem;
+  color: oklch(from var(--ds-color-neutral-000, #fff) l c h / 86%);
+  font-size: 0.875rem;
+}
+
+.fdicnet-hero h1 {
+  margin: 0;
+  color: inherit;
+  font-size: 2.25rem;
+  line-height: 1.1;
+}
+
+.fdicnet-section-nav {
+  display: flex;
+  gap: 1.5rem;
+  width: min(100% - 2rem, var(--fdicnet-max));
+  margin-inline: auto;
+  overflow-x: auto;
+  border-block-start: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 18%);
+}
+
+.fdicnet-section-nav a {
+  flex: 0 0 auto;
+  padding-block: 0.65rem;
+  color: inherit;
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.fdicnet-section {
+  width: min(100% - 2rem, var(--fdicnet-max));
+  margin-inline: auto;
+  padding-block: 2rem;
+}
+
+.fdicnet-section h2,
+.fdicnet-section h3,
+.fdicnet-section p,
+.fdicnet-section ul {
+  margin-block: 0;
+}
+
+.fdicnet-section h2 {
+  margin-block-end: 1rem;
+  color: var(--fdic-text-heading, #212123);
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+
+.fdicnet-section h3 {
+  color: var(--fdic-text-heading, #212123);
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.fdicnet-section p {
+  line-height: 1.55;
+}
+
+.fdicnet-section a {
+  font-weight: 600;
+}
+
+.fdicnet-news {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.fdicnet-story {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.9fr) minmax(0, 1fr);
+  gap: 1.75rem;
+  align-items: start;
+}
+
+.fdicnet-story__visual {
+  min-height: 15.25rem;
+  border-radius: 0.25rem;
+  background:
+    radial-gradient(circle at 52% 36%, oklch(72% 0.08 55deg / 90%) 0 8%, transparent 9%),
+    linear-gradient(90deg, oklch(22% 0.06 28deg) 0 30%, transparent 30%),
+    linear-gradient(145deg, oklch(36% 0.09 31deg), oklch(16% 0.05 253deg) 58%, oklch(68% 0.05 78deg));
+  box-shadow: inset 0 0 0 1px oklch(from var(--ds-color-neutral-1000, #000) l c h / 8%);
+}
+
+.fdicnet-story__copy {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.fdicnet-meta,
+.fdicnet-message-list span,
+.fdicnet-event p {
+  color: var(--fdic-text-secondary, #565c65);
+  font-size: 0.875rem;
+}
+
+.fdicnet-latest {
+  margin-block-start: 2rem;
+  padding-block-start: 1rem;
+}
+
+.fdicnet-latest h2 {
+  margin-block-end: 0.65rem;
+}
+
+.fdicnet-latest h3,
+.fdicnet-latest :where(p + p) {
+  margin-block-start: 0.4rem;
+}
+
+.fdicnet-more {
+  margin-block-start: 1rem;
+  text-align: end;
+}
+
+.fdicnet-more a::after {
+  content: " >";
+}
+
+.fdicnet-news__messages {
+  min-width: 0;
+}
+
+.fdicnet-message-list {
+  display: grid;
+  gap: 1.15rem;
+  padding: 0;
+  list-style: none;
+}
+
+.fdicnet-message-list li {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.fdicnet-featured-links {
+  width: 100%;
+  max-width: none;
+  padding-inline: max(1rem, calc((100% - var(--fdicnet-max)) / 2));
+  border-block: 1px solid var(--ds-color-primary-200, #9bd8f2);
+  background: var(--fdicnet-blue-soft);
+}
+
+.fdicnet-featured-links__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 3rem;
+}
+
+.fdicnet-featured-link {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+  color: var(--fdic-text-primary, #212123);
+  text-decoration: none;
+}
+
+.fdicnet-featured-link span {
+  display: grid;
+  grid-row: 1 / 3;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  color: var(--fdicnet-blue);
+  background: var(--ds-color-primary-200, #9bd8f2);
+  font-weight: 800;
+}
+
+.fdicnet-featured-link strong {
+  color: var(--fdicnet-blue);
+  font-size: 1.05rem;
+  text-decoration: underline;
+}
+
+.fdicnet-featured-link small {
+  color: var(--fdic-text-secondary, #565c65);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.fdicnet-link-categories {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3rem;
+}
+
+.fdicnet-link-category h2 {
+  position: relative;
+  padding-block-end: 0.75rem;
+  font-size: 1.15rem;
+}
+
+.fdicnet-link-category h2::after {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  width: 4.5rem;
+  height: 3px;
+  background: var(--ds-color-primary-400, #38b6ff);
+  content: "";
+}
+
+.fdicnet-link-category ul {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0;
+  list-style: none;
+}
+
+.fdicnet-events {
+  width: 100%;
+  max-width: none;
+  padding-inline: max(1rem, calc((100% - var(--fdicnet-max)) / 2));
+  border-block: 1px solid var(--ds-color-secondary-300, #e0c875);
+  background: var(--fdicnet-gold-soft);
+}
+
+.fdicnet-events__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem;
+}
+
+.fdicnet-event {
+  display: grid;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.fdicnet-event time {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--ds-color-text-warm, #4d3a08);
+  background: var(--ds-color-secondary-300, #e0c875);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.fdicnet-event time span {
+  font-size: 0.7rem;
+}
+
+.fdicnet-event time strong {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.fdicnet-event div > :last-child {
+  margin-block-start: 0.35rem;
+}
+
+.fdicnet-people-social {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4rem;
+}
+
+.fdicnet-spotlight,
+.fdicnet-social {
+  min-width: 0;
+}
+
+.fdicnet-person {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-block-end: 1rem;
+}
+
+.fdicnet-avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  color: var(--ds-color-text-inverted, #fff);
+  background: var(--fdicnet-blue);
+  font-weight: 800;
+}
+
+.fdicnet-person div > :last-child {
+  color: var(--fdic-text-secondary, #565c65);
+  font-size: 0.875rem;
+}
+
+.fdicnet-social__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 14.625rem;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.fdicnet-social__content p + p {
+  margin-block-start: 1rem;
+}
+
+.fdicnet-social-card {
+  display: grid;
+  align-content: space-between;
+  min-height: 14.625rem;
+  padding: 1rem;
+  color: var(--ds-color-text-inverted, #fff);
+  background:
+    linear-gradient(135deg, oklch(from var(--ds-color-primary-400, #38b6ff) l c h / 28%), transparent 42%),
+    var(--fdicnet-blue-deep);
+  font-weight: 800;
+}
+
+.fdicnet-social-card > :last-child {
+  justify-self: end;
+}
+
+.fdic-page-feedback {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: min(100% - 2rem, 82rem);
+  min-height: 5.75rem;
+  margin-inline: auto;
+  border-block-start: 1px solid var(--ds-color-border-subtle, #dfe1e2);
+}
+
+.fdic-page-feedback__prompt,
+.fdic-page-feedback__responses {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.fdic-page-feedback h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.fdic-page-feedback button,
+.fdic-page-feedback__report {
+  min-height: 2.75rem;
+  padding: 0.6rem 1.4rem;
+  border: 1px solid var(--ds-color-border-subtle, #dfe1e2);
+  border-radius: 0;
+  color: var(--fdic-text-primary, #212123);
+  background: var(--ds-color-bg-interactive, #f7f9fb);
+  font: inherit;
+  text-decoration: none;
+}
+
+.fdic-page-feedback__report::before {
+  content: "[!] ";
+}
+
+.fdic-site-footer__main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem 2rem;
+  align-items: center;
+  padding: 2rem max(1rem, calc((100% - 82rem) / 2));
+  border-block-start: 6px solid var(--ds-color-primary-400, #38b6ff);
+  color: var(--ds-color-text-inverted, #fff);
+  background: var(--ds-color-bg-brand, #05314f);
+}
+
+.fdic-site-footer__brand {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.fdic-site-footer__brand img {
+  width: 5rem;
+  height: 2.5rem;
+  object-fit: cover;
+  background: var(--ds-color-bg-surface, #fff);
+}
+
+.fdic-site-footer__agency {
+  margin: 0;
+  font-weight: 700;
+}
+
+.fdic-site-footer__links {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: end;
+}
+
+.fdic-site-footer__links a {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 28%);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.fdic-site-footer__updated {
+  grid-column: 2;
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.fdic-site-footer a {
+  color: inherit;
+}
+
+.fdic-site-header__nav a:hover,
+.fdicnet-section-nav a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 74rem) {
+  .fdicnet-news,
+  .fdicnet-story,
+  .fdicnet-featured-links__grid,
+  .fdicnet-link-categories,
+  .fdicnet-events__grid,
+  .fdicnet-people-social {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fdicnet-news__messages {
+    grid-column: 1 / -1;
+  }
+
+  .fdicnet-story {
+    align-items: stretch;
+  }
+
+  .fdicnet-social__content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fdicnet-social-card {
+    min-height: 11rem;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  .fdic-site-header__masthead,
+  .fdic-page-feedback,
+  .fdic-page-feedback__prompt,
+  .fdic-site-footer__brand {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .fdic-site-header__masthead {
+    gap: 1rem;
+    padding-block: 1rem;
+  }
+
+  .fdic-site-header__search {
+    width: 100%;
+  }
+
+  .fdic-site-header__nav,
+  .fdicnet-section-nav {
+    gap: 1rem;
+  }
+
+  .fdicnet-hero__inner {
+    min-height: 7rem;
+  }
+
+  .fdicnet-hero h1 {
+    font-size: 1.75rem;
+  }
+
+  .fdicnet-news,
+  .fdicnet-story,
+  .fdicnet-featured-links__grid,
+  .fdicnet-link-categories,
+  .fdicnet-events__grid,
+  .fdicnet-people-social,
+  .fdicnet-social__content,
+  .fdic-site-footer__main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fdicnet-section {
+    padding-block: 1.5rem;
+  }
+
+  .fdicnet-story__visual {
+    min-height: 12rem;
+  }
+
+  .fdicnet-featured-link {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .fdicnet-featured-link span,
+  .fdicnet-event time,
+  .fdicnet-avatar {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .fdicnet-event {
+    grid-template-columns: 3rem minmax(0, 1fr);
+  }
+
+  .fdic-page-feedback {
+    padding-block: 1rem;
+  }
+
+  .fdic-page-feedback__responses {
+    width: 100%;
+  }
+
+  .fdic-page-feedback button,
+  .fdic-page-feedback__report {
+    flex: 1 1 0;
+    text-align: center;
+  }
+
+  .fdic-site-footer__links {
+    justify-content: start;
+  }
+
+  .fdic-site-footer__updated {
+    grid-column: auto;
+  }
+}
+
 .search-result__info {
   color: var(--ds-color-text-secondary, var(--fdic-text-secondary, #565c65));
   font-size: var(--fdic-font-size-small, 0.875rem);

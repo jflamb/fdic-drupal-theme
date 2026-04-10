@@ -74,6 +74,22 @@ function fdic_preprocess_region(array &$variables): void {
 }
 
 /**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function fdic_preprocess_node(array &$variables): void {
+  $node = $variables['node'] ?? NULL;
+  $route_match = \Drupal::routeMatch();
+  $route_node = $route_match->getParameter('node');
+
+  $variables['fdic_is_front_node'] = $node
+    && \Drupal::service('path.matcher')->isFrontPage()
+    && (
+      $route_node === $node
+      || (is_numeric($route_node) && (string) $route_node === (string) $node->id())
+    );
+}
+
+/**
  * Implements hook_preprocess_HOOK() for input.html.twig.
  */
 function fdic_preprocess_input(array &$variables): void {

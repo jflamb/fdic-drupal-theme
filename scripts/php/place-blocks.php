@@ -12,6 +12,20 @@
 
 use Drupal\block\Entity\Block;
 
+$stale_block_ids = [
+  // Older bootstrap runs used this id for the system main block. Remove it so
+  // rerunning the current script repairs local sites instead of rendering the
+  // main content block twice.
+  'fdic_content',
+];
+
+foreach ($stale_block_ids as $stale_block_id) {
+  $stale_block = Block::load($stale_block_id);
+  if ($stale_block) {
+    $stale_block->delete();
+  }
+}
+
 $blocks = [
   [
     'id'     => 'fdic_page_title',

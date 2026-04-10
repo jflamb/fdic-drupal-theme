@@ -4,24 +4,22 @@
  * Theme override for the header region.
  */
 #}
-{{ attach_library('fdic/global-header') }}
-
-{% set header_source = {
-  items: fdic_main_menu|default([]),
-  search: fdic_header_search|default({
-    action: '/search',
-    paramName: 'keys',
-    placeholder: 'Search FDIC'|t
-  })
-} %}
-
 <header class="fdic-site-header" role="banner">
-  <fd-global-header data-fdic-global-header>
-    <script type="application/json" data-fdic-global-header-source>{{ header_source|json_encode(constant('JSON_HEX_TAG'))|raw }}</script>
-  </fd-global-header>
-  {% if content %}
-    <div class="fdic-site-header__content">
-      {{ content }}
-    </div>
-  {% endif %}
+  <div class="fdic-site-header__masthead">
+    <a class="fdic-site-header__wordmark" href="{{ path('<front>') }}" aria-label="{{ 'FDICnet home'|t }}">
+      <span class="fdic-site-header__fdic">FDIC</span><span class="fdic-site-header__net">net</span>
+    </a>
+    <form class="fdic-site-header__search" action="{{ path('<front>') }}" method="get" role="search">
+      <label class="fdic-visually-hidden" for="fdic-header-search">{{ 'Search FDICnet'|t }}</label>
+      <input id="fdic-header-search" name="keys" type="search" placeholder="{{ 'Search FDICnet'|t }}">
+    </form>
+  </div>
+  <nav class="fdic-site-header__nav" aria-label="{{ 'Primary navigation'|t }}">
+    <a href="{{ path('<front>') }}">{{ 'News & Events'|t }}</a>
+    <a href="{{ path('<front>') }}#career">{{ 'Career Development & Training'|t }}</a>
+    <a href="{{ path('<front>') }}#knowledge">{{ 'Knowledge Base'|t }}</a>
+    <a href="{{ path('<front>') }}#benefits">{{ 'Benefits'|t }}</a>
+    <a href="{{ path('<front>') }}#services">{{ 'Employee Services'|t }}</a>
+    <a href="{{ path('<front>') }}#about">{{ 'About'|t }}</a>
+  </nav>
 </header>

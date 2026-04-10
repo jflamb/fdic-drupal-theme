@@ -22,7 +22,7 @@
     <h2{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
     </h2>
-  {% else %}
+  {% elseif not fdic_is_front_node %}
     <fd-page-header heading="{{ label|render|striptags|trim }}"></fd-page-header>
   {% endif %}
   {{ title_suffix }}

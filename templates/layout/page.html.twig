@@ -4,7 +4,12 @@
  * Theme override for the main page structure.
  */
 #}
-<div class="fdic-page">
+{% set page_classes = [
+  'fdic-page',
+  is_front ? 'fdic-page--front',
+] %}
+
+<div{{ create_attribute({'class': page_classes}) }}>
   {{ page.header }}
 
   {% if page.breadcrumb %}
@@ -47,4 +52,34 @@
   </main>
 
   {{ page.footer }}
+
+  <footer id="about" class="fdic-site-footer" role="contentinfo">
+    <section class="fdic-page-feedback" aria-labelledby="fdic-feedback-title">
+      <div class="fdic-page-feedback__prompt">
+        <h2 id="fdic-feedback-title">{{ 'Is this page useful?'|t }}</h2>
+        <div class="fdic-page-feedback__responses" role="group" aria-label="{{ 'Page usefulness feedback'|t }}">
+          <button type="button">{{ 'Yes'|t }}</button>
+          <button type="button">{{ 'No'|t }}</button>
+        </div>
+      </div>
+      <a class="fdic-page-feedback__report" href="{{ path('<front>') }}">{{ 'Report a problem with this page'|t }}</a>
+    </section>
+
+    <section class="fdic-site-footer__main" aria-label="{{ 'FDIC footer'|t }}">
+      <div class="fdic-site-footer__brand">
+        <img src="{{ base_path ~ directory }}/logo.svg" alt="" width="80" height="40" loading="lazy">
+        <div>
+          <p class="fdic-site-footer__agency">{{ 'Federal Deposit Insurance Corp.'|t }}</p>
+          <a href="{{ path('<front>') }}">{{ 'Accessibility'|t }}</a>
+        </div>
+      </div>
+      <div class="fdic-site-footer__links" aria-label="{{ 'FDIC social links'|t }}">
+        <a href="{{ path('<front>') }}" aria-label="{{ 'FDIC on Facebook'|t }}">f</a>
+        <a href="{{ path('<front>') }}" aria-label="{{ 'FDIC on X'|t }}">x</a>
+        <a href="{{ path('<front>') }}" aria-label="{{ 'FDIC on YouTube'|t }}">yt</a>
+        <a href="{{ path('<front>') }}" aria-label="{{ 'FDIC on LinkedIn'|t }}">in</a>
+      </div>
+      <p class="fdic-site-footer__updated">{{ 'Updated August 7, 2024'|t }}</p>
+    </section>
+  </footer>
 </div>
