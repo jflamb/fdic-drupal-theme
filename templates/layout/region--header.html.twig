@@ -14,7 +14,7 @@
       current: is_front|default(false),
     },
     {
-      title: 'Career Development & Training'|t,
+      title: 'Learning'|t,
       url: path('<front>') ~ '#career',
     },
     {
@@ -26,7 +26,7 @@
       url: path('<front>') ~ '#benefits',
     },
     {
-      title: 'Employee Services'|t,
+      title: 'Support'|t,
       url: path('<front>') ~ '#services',
     },
     {
@@ -43,7 +43,7 @@
   }
 } %}
 
-<fd-global-header data-fdic-global-header data-fdic-global-header-story="shy" shy>
+<fd-global-header data-fdic-global-header>
   <a slot="brand" class="fdic-global-header__brand-link" href="{{ path('<front>') }}" aria-label="{{ 'FDICnet home'|t }}">
     <img
       class="fdic-global-header__brand-image"
@@ -52,9 +52,6 @@
       width="140"
       height="35">
   </a>
-  <fd-button slot="utility" variant="subtle-inverted" aria-label="{{ 'Apps'|t }}" type="button">
-    <fd-icon slot="icon-start" name="squares-four" aria-hidden="true" style="--fd-icon-size:1.75rem;"></fd-icon>
-  </fd-button>
   <fd-button slot="utility" variant="subtle-inverted" aria-label="{{ 'Profile'|t }}" type="button">
     <fd-icon slot="icon-start" name="user-circle" aria-hidden="true" style="--fd-icon-size:1.75rem;"></fd-icon>
   </fd-button>

@@ -22,7 +22,36 @@
     <h2{{ title_attributes }}>
       <a href="{{ url }}" rel="bookmark">{{ label }}</a>
     </h2>
-  {% elseif not fdic_is_front_node %}
+  {% elseif fdic_is_front_node %}
+    {% set front_page_header = {
+      breadcrumbs: [
+        {
+          label: 'Home'|t,
+          href: path('<front>'),
+        },
+      ],
+      heading: 'FDICnet'|t,
+      kicker: 'Employee resources, updates, and tools'|t,
+    } %}
+    <fd-page-header
+      class="fdic-front-page-header"
+      heading="{{ front_page_header.heading }}"
+      kicker="{{ front_page_header.kicker }}"
+      breadcrumb-label="{{ 'Breadcrumbs'|t }}"
+    >
+      <fd-button-group slot="actions" label="{{ 'Page actions'|t }}">
+        <fd-button variant="subtle" href="#news">
+          <fd-icon slot="icon-start" name="share-fat" aria-hidden="true"></fd-icon>
+          {{ 'Share'|t }}
+        </fd-button>
+        <fd-button variant="subtle" href="#benefits">
+          <fd-icon slot="icon-start" name="plus" aria-hidden="true"></fd-icon>
+          {{ 'Add to Quick Links'|t }}
+        </fd-button>
+      </fd-button-group>
+      <script type="application/json" data-fdic-page-header-source>{{ front_page_header.breadcrumbs|json_encode(constant('JSON_HEX_TAG'))|raw }}</script>
+    </fd-page-header>
+  {% else %}
     <fd-page-header heading="{{ label|render|striptags|trim }}"></fd-page-header>
   {% endif %}
   {{ title_suffix }}

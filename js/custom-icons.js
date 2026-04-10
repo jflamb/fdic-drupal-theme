@@ -1,4 +1,4 @@
-import { iconRegistry } from '../node_modules/@fdic-ds/components/dist/chunk-3MALN5X4.js';
+import { iconRegistry } from '../node_modules/@fdic-ds/components/dist/index.js';
 
 // Extra icons sourced from @phosphor-icons/core regular-weight SVG assets.
 iconRegistry.register({

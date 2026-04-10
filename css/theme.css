@@ -327,21 +327,10 @@ fd-pagination:not(:defined) {
   overflow: visible;
 }
 
-.fdicnet-page-header {
-  --fd-page-header-bg:
-    linear-gradient(90deg, oklch(from var(--ds-color-primary-900, #05314f) l c h / 96%), oklch(from var(--ds-color-primary-900, #05314f) l c h / 72%)),
-    linear-gradient(135deg, transparent 0 52%, oklch(from var(--ds-color-primary-400, #38b6ff) l c h / 38%) 52% 54%, transparent 54%),
-    repeating-linear-gradient(90deg, oklch(from var(--ds-color-neutral-000, #fff) l c h / 6%) 0 1px, transparent 1px 8rem),
-    linear-gradient(160deg, var(--ds-color-primary-800, #074c76), var(--ds-color-primary-900, #05314f));
-  --fd-page-header-max-width: 82rem;
-  --fd-page-header-padding-block: 2rem 1.25rem;
-  --fd-page-header-padding-inline: max(1rem, calc((100% - 82rem) / 2));
-  --fd-page-header-title-size: 2.25rem;
-  --fd-page-header-kicker-size: 0.875rem;
-}
-
 .fdicnet-home {
-  --fdicnet-max: 82rem;
+  --fdicnet-content-max: 1440px;
+  --fdicnet-content-padding: 64px;
+  --fdicnet-content-padding-mobile: 16px;
   --fdicnet-blue-deep: var(--ds-color-primary-900, #05314f);
   --fdicnet-blue: var(--ds-color-primary-500, #0d6191);
   --fdicnet-blue-soft: var(--ds-color-primary-050, #e7f6fd);
@@ -351,22 +340,14 @@ fd-pagination:not(:defined) {
   color: var(--fdic-text-primary, #212123);
 }
 
-.fdicnet-section-nav {
-  display: flex;
-  gap: 1.5rem;
-  padding-inline: max(1rem, calc((100% - 82rem) / 2));
-  overflow-x: auto;
-  color: var(--ds-color-text-inverted, #fff);
-  background: var(--ds-color-primary-900, #05314f);
-  border-block-start: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 18%);
-}
-
-.fdicnet-section-nav a {
-  flex: 0 0 auto;
-  padding-block: 0.65rem;
-  color: inherit;
-  font-size: 0.8125rem;
-  text-decoration: none;
+.fdic-page--front fd-global-header[data-fdic-global-header] {
+  display: block;
+  background-image:
+    linear-gradient(121deg, rgb(0 50 86 / 100%) 3%, rgb(7 60 91 / 60%) 94%),
+    url("../assets/fdicnet-header-bg.png");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .fdicnet-section {
@@ -375,9 +356,22 @@ fd-pagination:not(:defined) {
 }
 
 .fdicnet-section__inner {
-  width: min(100% - 2rem, var(--fdicnet-max));
+  box-sizing: border-box;
+  width: min(100%, var(--fdicnet-content-max));
   margin-inline: auto;
+  padding-inline: var(--fdicnet-content-padding);
   padding-block: 2rem;
+}
+
+.fdic-front-page-header {
+  --fd-page-header-padding-block: 32px;
+  --fd-page-header-padding-inline: var(--fdicnet-content-padding);
+  --fd-page-header-padding-inline-mobile: var(--fdicnet-content-padding-mobile);
+  --fd-page-header-max-width: var(--fdicnet-content-max);
+  --fd-page-header-title-size: 3rem;
+  --fd-page-header-kicker-size: 1.25rem;
+  --fd-page-header-padding-block-start-mobile: 24px;
+  --fd-page-header-padding-block-end-mobile: 24px;
 }
 
 .fdicnet-section h2,
@@ -408,7 +402,7 @@ fd-pagination:not(:defined) {
   font-weight: 600;
 }
 
-.fdicnet-news {
+.fdicnet-news .fdicnet-section__inner {
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(18rem, 1fr);
   gap: 3rem;
@@ -423,18 +417,18 @@ fd-pagination:not(:defined) {
 }
 
 .fdicnet-story__visual {
-  min-height: 15.25rem;
-  border-radius: 0.25rem;
-  background:
-    radial-gradient(circle at 52% 36%, oklch(72% 0.08 55deg / 90%) 0 8%, transparent 9%),
-    linear-gradient(90deg, oklch(22% 0.06 28deg) 0 30%, transparent 30%),
-    linear-gradient(145deg, oklch(36% 0.09 31deg), oklch(16% 0.05 253deg) 58%, oklch(68% 0.05 78deg));
-  box-shadow: inset 0 0 0 1px oklch(from var(--ds-color-neutral-1000, #000) l c h / 8%);
+  overflow: hidden;
 }
 
 .fdicnet-story__copy {
   display: grid;
   gap: 0.5rem;
+}
+
+.fdicnet-story__image {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .fdicnet-meta,
@@ -489,23 +483,44 @@ fd-pagination:not(:defined) {
 }
 
 .fdicnet-featured-links__list {
-  --fd-tile-list-col-3-gap: 2rem;
-  --fd-tile-list-col-3-max: 24rem;
-  --fd-tile-description-font-size: 1rem;
-  --fd-tile-description-color: var(--fdic-text-secondary, #565c65);
-  --fd-tile-link-color: var(--fdicnet-blue);
-  --fd-tile-title-font-weight: 600;
-  --fd-tile-visual-size: 3.5rem;
-  --fd-tile-visual-content-size: 1.5rem;
-  --fd-visual-size: 3.5rem;
-  --fd-visual-content-size: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem 3rem;
 }
 
-.fdicnet-featured-links fd-tile {
-  --fd-tile-gap: 1rem;
+.fdicnet-featured-link {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
 }
 
-.fdicnet-link-categories {
+.fdicnet-featured-link__icon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  color: var(--fdicnet-blue);
+  background: rgb(56 182 255 / 16%);
+}
+
+.fdicnet-featured-link__icon svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+.fdicnet-featured-link__body {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.fdicnet-featured-link__body p {
+  color: var(--fdic-text-secondary, #565c65);
+}
+
+.fdicnet-link-categories .fdicnet-section__inner {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 3rem;
@@ -547,7 +562,7 @@ fd-pagination:not(:defined) {
   --fd-event-metadata-color: var(--fdic-text-secondary, #565c65);
 }
 
-.fdicnet-people-social {
+.fdicnet-people-social .fdicnet-section__inner {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 4rem;
@@ -593,36 +608,53 @@ fd-pagination:not(:defined) {
   margin-block-start: 1rem;
 }
 
+.fdicnet-social__platforms {
+  display: flex;
+  gap: 0.25rem;
+  margin-block-start: 0.25rem;
+}
+
+.fdicnet-social__platform {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.375rem;
+  height: 1.375rem;
+  color: var(--fdic-text-primary, #212123);
+}
+
+.fdicnet-social__platform svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
 .fdicnet-social-card {
-  display: grid;
-  align-content: space-between;
-  min-height: 14.625rem;
-  padding: 1rem;
-  color: var(--ds-color-text-inverted, #fff);
-  background:
-    linear-gradient(135deg, oklch(from var(--ds-color-primary-400, #38b6ff) l c h / 28%), transparent 42%),
-    var(--fdicnet-blue-deep);
-  font-weight: 800;
+  overflow: hidden;
+  border-radius: 0.5625rem;
 }
 
-.fdicnet-social-card > :last-child {
-  justify-self: end;
-}
-
-.fdicnet-section-nav a:hover {
-  text-decoration: underline;
+.fdicnet-social-card img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .fdic-page-feedback {
-  --fd-page-feedback-inline-padding: max(1rem, calc((100% - 82rem) / 2));
-  --fd-page-feedback-inline-padding-mobile: 1rem;
+  --fd-page-feedback-inline-padding:
+    max(
+      var(--fdicnet-content-padding-mobile),
+      calc((100vw - var(--fdicnet-content-max)) / 2 + var(--fdicnet-content-padding))
+    );
+  --fd-page-feedback-inline-padding-mobile: var(--fdicnet-content-padding-mobile);
 }
 
 @media (max-width: 74rem) {
-  .fdicnet-news,
+  .fdicnet-news .fdicnet-section__inner,
   .fdicnet-story,
-  .fdicnet-link-categories,
-  .fdicnet-people-social {
+  .fdicnet-featured-links__list,
+  .fdicnet-link-categories .fdicnet-section__inner,
+  .fdicnet-people-social .fdicnet-section__inner {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -644,20 +676,18 @@ fd-pagination:not(:defined) {
 }
 
 @media (max-width: 47.999rem) {
-  .fdicnet-section-nav {
-    gap: 1rem;
+  .fdicnet-section__inner {
+    padding-inline: var(--fdicnet-content-padding-mobile);
+    padding-block: 1.5rem;
   }
 
-  .fdicnet-news,
+  .fdicnet-news .fdicnet-section__inner,
   .fdicnet-story,
-  .fdicnet-link-categories,
-  .fdicnet-people-social,
+  .fdicnet-featured-links__list,
+  .fdicnet-link-categories .fdicnet-section__inner,
+  .fdicnet-people-social .fdicnet-section__inner,
   .fdicnet-social__content {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .fdicnet-section__inner {
-    padding-block: 1.5rem;
   }
 
   .fdicnet-story__visual {
@@ -667,10 +697,6 @@ fd-pagination:not(:defined) {
   .fdicnet-avatar {
     width: 3rem;
     height: 3rem;
-  }
-
-  .fdicnet-page-header {
-    --fd-page-header-title-size-mobile: 1.75rem;
   }
 }
 
