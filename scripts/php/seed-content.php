@@ -2,76 +2,177 @@
 
 /**
  * @file
- * Creates sample content for theme testing.
+ * Creates curated example content for the FDIC theme DDEV site.
  *
  * Run via: ddev drush php:script /var/www/html/scripts/php/seed-content.php
  *
- * Creates enough articles to exercise the pager (>10) and one basic page.
- * Idempotent — each node is checked individually by title so partial runs
- * are repaired on re-run.
+ * The script is idempotent by title. Re-running it updates existing seeded
+ * nodes so partial or older seed runs are repaired where practical.
  */
 
 use Drupal\node\Entity\Node;
+use Drupal\user\UserInterface;
 
-$marker = 'FDIC Theme Dev';
+$marker = 'FDIC Theme Example';
 
 /**
- * Creates a node if one with the given title does not already exist.
+ * Returns a valid node owner, preferring uid 1 only when it exists.
  */
-function _fdic_seed_ensure_node(string $type, string $title, string $body): void {
-  $existing = \Drupal::entityTypeManager()
-    ->getStorage('node')
-    ->loadByProperties(['title' => $title]);
+function _fdic_seed_owner_id(): int {
+  $user_storage = \Drupal::entityTypeManager()->getStorage('user');
+  $admin = $user_storage->load(1);
 
-  if (!empty($existing)) {
-    return;
+  if ($admin instanceof UserInterface) {
+    return 1;
   }
 
-  Node::create([
-    'type'   => $type,
-    'title'  => $title,
-    'body'   => [
-      'value'  => $body,
-      'format' => 'basic_html',
-    ],
-    'status' => 1,
-    'uid'    => 1,
-  ])->save();
+  $uids = $user_storage->getQuery()
+    ->accessCheck(FALSE)
+    ->condition('status', 1)
+    ->sort('uid')
+    ->range(0, 1)
+    ->execute();
+
+  if (!empty($uids)) {
+    return (int) reset($uids);
+  }
+
+  return 0;
 }
 
-// --- Articles (12 nodes so the default 10-per-page pager activates) ---
+/**
+ * Creates or updates a published node with a basic_html body.
+ */
+function _fdic_seed_ensure_node(string $type, string $title, string $body, array $options = []): Node {
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $matches = $storage->loadByProperties([
+    'type' => $type,
+    'title' => $title,
+  ]);
+
+  $node = !empty($matches) ? reset($matches) : Node::create([
+    'type' => $type,
+    'title' => $title,
+  ]);
+
+  if (!$node instanceof Node) {
+    $node = Node::create([
+      'type' => $type,
+      'title' => $title,
+    ]);
+  }
+
+  $node->set('body', [
+    'value' => $body,
+    'format' => 'basic_html',
+  ]);
+  $node->setOwnerId(_fdic_seed_owner_id());
+  $node->setPublished(TRUE);
+  $node->setPromoted((bool) ($options['promoted'] ?? ($type === 'article')));
+  $node->setSticky((bool) ($options['sticky'] ?? FALSE));
+  $node->save();
+
+  return $node;
+}
+
+/**
+ * Sets the configured front page to a node.
+ */
+function _fdic_seed_set_front_page(Node $node): void {
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('page.front', '/node/' . $node->id())
+    ->save();
+}
+
+$home = _fdic_seed_ensure_node('page', "$marker: Home",
+  '<p><strong>FDIC Theme Dev</strong> is a disposable Drupal site for developing and reviewing the FDIC Drupal theme against real Drupal output.</p>'
+  . '<p><a href="/node">Browse the article listing</a> or review <a href="/node?page=1">the second listing page</a> and node pages rendered by the standard profile.</p>'
+  . '<h2>Depositor confidence starts with clear service design</h2>'
+  . '<p>The example content uses standard Drupal page and article nodes, body fields, links, headings, ordered and unordered lists, and default node metadata so theme changes can be reviewed in context.</p>'
+  . '<h3>What this page covers</h3>'
+  . '<ul>'
+  . '<li>Page title and body field rendering</li>'
+  . '<li>Breadcrumb and system message block placement</li>'
+  . '<li>FDIC Design System CSS, JavaScript, and web component assets</li>'
+  . '<li>Progressive enhancement fallbacks for Drupal markup</li>'
+  . '</ul>'
+  . '<h3>Common user tasks</h3>'
+  . '<ol>'
+  . '<li>Confirm deposit insurance coverage.</li>'
+  . '<li>Find supervision and consumer protection resources.</li>'
+  . '<li>Read research, reports, and public updates.</li>'
+  . '</ol>',
+  ['promoted' => FALSE, 'sticky' => TRUE]
+);
+_fdic_seed_set_front_page($home);
+
+_fdic_seed_ensure_node('page', "$marker: About This Site",
+  '<p>This local site is created by <code>scripts/bootstrap.sh</code>. It is intentionally disposable and can be rebuilt from the theme repository at any time.</p>'
+  . '<h2>Integration checks</h2>'
+  . '<p>The DDEV site verifies that Drupal can discover the theme, enable it as the default theme, place blocks, render node pages, and serve FDIC Design System assets from <code>node_modules</code>.</p>'
+  . '<h3>Markup covered</h3>'
+  . '<ul>'
+  . '<li>Global header, footer, breadcrumb, highlighted, and content regions</li>'
+  . '<li>Status message block placement for success, warning, and error messages</li>'
+  . '<li>Article listings with multiple pages of content</li>'
+  . '<li>Native Drupal forms and field wrappers used as fallbacks</li>'
+  . '</ul>'
+  . '<p>Use <a href="/node">the article listing</a> to review pager behavior and promoted content cards.</p>',
+  ['promoted' => FALSE]
+);
+
+_fdic_seed_ensure_node('page', "$marker: Consumer Resources",
+  '<p>Consumers need direct paths to practical banking information. This page provides copy patterns for links, lists, and section headings.</p>'
+  . '<h2>Start with the basics</h2>'
+  . '<ul>'
+  . '<li><a href="https://www.fdic.gov/resources/deposit-insurance/">Deposit insurance information</a></li>'
+  . '<li><a href="https://www.fdic.gov/resources/consumers/">Consumer assistance resources</a></li>'
+  . '<li><a href="https://banks.data.fdic.gov/bankfind-suite/bankfind">BankFind Suite</a></li>'
+  . '</ul>'
+  . '<h2>Before opening an account</h2>'
+  . '<ol>'
+  . '<li>Confirm the institution is FDIC-insured.</li>'
+  . '<li>Review account fees, access, and disclosures.</li>'
+  . '<li>Keep records for deposits, withdrawals, and account changes.</li>'
+  . '</ol>',
+  ['promoted' => FALSE]
+);
 
 $article_bodies = [
-  'The Federal Deposit Insurance Corporation insures deposits at member banks and thrift institutions. This article covers how deposit insurance works and why it matters for consumers.',
-  'Bank examinations are a core FDIC function. Examiners assess a bank\'s financial condition, management practices, and compliance with consumer protection laws.',
-  'The FDIC publishes quarterly banking profiles that summarize the financial results of all insured institutions. These reports track industry trends in lending, asset quality, and earnings.',
-  'Community banks serve a vital role in local economies. They typically focus on relationship lending and have deep knowledge of their markets.',
-  'When a bank fails, the FDIC steps in as receiver to protect insured depositors. The resolution process aims to minimize disruption and preserve asset value.',
-  'The Dodd-Frank Act expanded the FDIC\'s authority and raised the standard deposit insurance limit to $250,000 per depositor, per institution, per ownership category.',
-  'Risk-based deposit insurance premiums mean that banks taking greater risks pay higher assessments. This creates incentives for prudent risk management.',
-  'The FDIC maintains the Deposit Insurance Fund through premiums assessed on insured institutions. The fund target ratio is set by statute at 1.35 percent of insured deposits.',
-  'Consumer compliance examinations evaluate whether banks follow laws like the Truth in Lending Act, Equal Credit Opportunity Act, and Fair Housing Act.',
-  'Digital banking has transformed how consumers interact with financial institutions. The FDIC monitors technology risks including cybersecurity, third-party dependencies, and operational resilience.',
-  'Bank merger applications are reviewed for competitive effects, financial and managerial resources, community reinvestment needs, and anti-money-laundering compliance.',
-  'The FDIC\'s economic research division publishes working papers on topics ranging from bank lending patterns to systemic risk measurement and financial stability indicators.',
+  'How deposit insurance protects customers when an insured bank fails.',
+  'What community banks contribute to local lending and economic resilience.',
+  'How risk management supports safe and sound banking operations.',
+  'Why consumer compliance examinations matter for fair access to credit.',
+  'How quarterly banking data helps identify trends across insured institutions.',
+  'What happens during a bank resolution and how insured depositors are protected.',
+  'How cybersecurity, vendors, and operational resilience affect digital banking.',
+  'Why transparent disclosures help consumers compare account options.',
+  'How merger applications are reviewed for competition and community needs.',
+  'What the Deposit Insurance Fund does and how assessments support it.',
+  'How economic research informs supervision, policy, and public understanding.',
+  'What examiners review when evaluating bank management and controls.',
+  'How mobile banking changes expectations for service, security, and access.',
+  'Why accessible content matters for public banking resources.',
+  'How data publications support journalists, researchers, and local leaders.',
+  'What consumers should know before responding to unexpected bank messages.',
 ];
 
-for ($i = 0; $i < count($article_bodies); $i++) {
-  $num = $i + 1;
-  _fdic_seed_ensure_node('article', "$marker — Article $num", '<p>' . $article_bodies[$i] . '</p>');
+foreach ($article_bodies as $index => $summary) {
+  $number = $index + 1;
+  _fdic_seed_ensure_node('article', sprintf('%s: Banking Update %02d', $marker, $number),
+    '<p>' . $summary . '</p>'
+    . '<h2>Key points</h2>'
+    . '<ul>'
+    . '<li>Plain language helps people understand decisions and next steps.</li>'
+    . '<li>Consistent structure makes long public information easier to scan.</li>'
+    . '<li>Drupal default markup should remain usable before JavaScript loads.</li>'
+    . '</ul>'
+    . '<h3>Details for reviewers</h3>'
+    . '<p>This article exercises headings, body text, links to <a href="/node">the listing page</a>, promoted article rendering, and default node metadata.</p>',
+    [
+      'promoted' => TRUE,
+      'sticky' => $number === 1,
+    ]
+  );
 }
-
-// --- Basic page ---
-
-_fdic_seed_ensure_node('page', "$marker — About This Site",
-  '<p>This is a disposable Drupal site for developing and testing the FDIC theme. It was created by <code>scripts/bootstrap.sh</code>.</p>'
-  . '<h2>What to test</h2>'
-  . '<ul>'
-  . '<li>Global header — menu rendering and search</li>'
-  . '<li>Status messages — create and save content to trigger success alerts</li>'
-  . '<li>Pager — the article listing should have multiple pages</li>'
-  . '<li>Form elements — edit a node to see fd-input, fd-textarea, fd-selector</li>'
-  . '<li>Skip link — press Tab on any page</li>'
-  . '<li>Progressive enhancement — disable JavaScript and verify forms still work</li>'
-  . '</ul>'
-);

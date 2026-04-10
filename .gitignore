@@ -24,6 +24,7 @@ coverage/
 # Build artifacts, if a local experiment creates them.
 build/
 dist/
+public/
 
 # OS and editor files
 .DS_Store

@@ -16,7 +16,7 @@ npm install
 drush cr
 ```
 
-This scaffold does not include `package-lock.json` because dependency installation was intentionally skipped. Commit the generated lockfile after the first authenticated install.
+Install dependencies with the committed `package-lock.json` so local checks and CI use the same package graph.
 
 The theme does not require bundling or a postinstall asset copy. Drupal libraries point directly at published files under `node_modules/@fdic-ds/`:
 
@@ -68,6 +68,8 @@ The menu serializer currently lives in `fdic.theme` and uses Drupal static servi
 
 A DDEV configuration and bootstrap script create a disposable Drupal site for testing the theme without an existing Drupal project.
 
+DDEV is the canonical Drupal integration environment for this theme. Static output is only a rendered preview of that DDEV site; it is not a replacement for Drupal bootstrap and verification.
+
 ### Prerequisites
 
 - Docker Desktop (or OrbStack / Colima)
@@ -95,6 +97,8 @@ Login at the printed URL with `admin` / `admin`.
 | `scripts/teardown.sh` | Destroy DDEV project + `drupal/` directory |
 | `scripts/bootstrap.sh` | Recreate from scratch |
 | `scripts/bootstrap.sh --quick` | Bootstrap without sample content |
+| `scripts/verify-ddev.sh` | Verify Drupal bootstrap, active theme, bounded linked theme directory, homepage, and FDIC Design System assets |
+| `scripts/export-static.sh` | Export the verified DDEV site into `public/` as a static rendered preview |
 
 ### How it works
 
@@ -108,7 +112,10 @@ The theme repo is the DDEV project. `.ddev/config.yaml` points `docroot` at `dru
 6. Installs Drupal with the standard profile
 7. Enables and sets the FDIC theme as default
 8. Places blocks in the theme's regions (header, content, breadcrumb, highlighted)
-9. Creates 12 sample articles (for pager testing) and a basic page
+9. Creates a curated homepage, basic pages, and enough articles to exercise the listing pager
+10. Sets the curated homepage node as Drupal's front page
+
+`scripts/bootstrap.sh --quick` keeps the same Drupal install and theme checks but skips seeded sample content. Use the full `scripts/bootstrap.sh` when producing a preview snapshot so the rendered site has meaningful content.
 
 ### Linked theme directory
 
@@ -127,16 +134,31 @@ The generated `drupal/web/themes/custom/fdic` directory is not a symlink to the 
 
 This preserves live local edits while preventing Drupal extension discovery from recursing through the generated `drupal/` application.
 
+### Static Snapshot
+
+After the DDEV site has been bootstrapped and verified, export a static preview:
+
+```sh
+scripts/export-static.sh
+```
+
+The exporter writes a clean `public/` directory (gitignored), snapshots `/`, the Drupal article listing, a pager page, and the seeded node detail pages, then downloads the CSS, JavaScript, images, and `node_modules` assets referenced by those pages. It is deterministic and safe to rerun.
+
+The snapshot is rendered HTML only. It is useful for GitHub Pages previews, but it is not a live Drupal site. Forms, search, authenticated routes, and other dynamic Drupal behavior are not expected to submit or mutate state from the static output.
+
 ### CI / remote builds
 
 The same bootstrap and verification scripts work locally and in CI:
 
 ```sh
-scripts/bootstrap.sh --quick
+scripts/bootstrap.sh
 scripts/verify-ddev.sh
+scripts/export-static.sh
 ```
 
-The committed workflow at `.github/workflows/theme-ci.yml` runs the same DDEV verification after the static theme checks. A minimal GitHub Actions job looks like this:
+The committed workflow at `.github/workflows/theme-ci.yml` runs npm checks, bootstraps DDEV, verifies the Drupal integration, and, on pushes to `main`, exports `public/` as a GitHub Pages artifact and deploys it with GitHub Actions. Pull requests run the checks without deploying.
+
+A minimal GitHub Actions job looks like this:
 
 ```yaml
 jobs:
@@ -164,8 +186,9 @@ jobs:
 
       - run: npm ci
       - run: npm test
-      - run: scripts/bootstrap.sh --quick
+      - run: scripts/bootstrap.sh
       - run: scripts/verify-ddev.sh
+      - run: scripts/export-static.sh
 ```
 
 Requirements:
@@ -173,6 +196,7 @@ Requirements:
 - Docker available on the runner (GitHub-hosted Ubuntu runners include it)
 - DDEV installed (see install commands above or the [DDEV docs](https://ddev.readthedocs.io/en/stable/users/install/))
 - `packages: read` permission for the workflow's `GITHUB_TOKEN`, or a repository secret (`FDIC_DS_NPM_TOKEN`) with a GitHub token that has `read:packages` scope for the `@jflamb` packages, written into `.npmrc` before `npm ci` or the bootstrap runs
+- GitHub Pages configured with source set to **GitHub Actions** before the deploy job can publish the static snapshot
 
 ## Design System Updates
 
