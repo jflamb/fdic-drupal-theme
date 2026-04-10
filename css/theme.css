@@ -279,86 +279,6 @@ fd-pagination:not(:defined) {
   max-width: 70ch;
 }
 
-.fdic-site-header {
-  color: var(--ds-color-text-inverted, #fff);
-  background: var(--ds-color-bg-brand, #05314f);
-}
-
-.fdic-site-header__masthead {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2rem;
-  width: min(100% - 2rem, 82rem);
-  min-height: 5.75rem;
-  margin-inline: auto;
-}
-
-.fdic-site-header__wordmark {
-  display: inline-flex;
-  align-items: baseline;
-  color: inherit;
-  text-decoration: none;
-}
-
-.fdic-site-header__fdic {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: 0;
-}
-
-.fdic-site-header__net {
-  font-size: 1.35rem;
-  font-weight: 500;
-  letter-spacing: 0;
-}
-
-.fdic-site-header__search {
-  position: relative;
-  width: min(100%, 18rem);
-}
-
-.fdic-site-header__search::before {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: 0.75rem;
-  color: var(--ds-color-text-secondary, #565c65);
-  content: "Search";
-  font-size: 0.75rem;
-  line-height: 1;
-  pointer-events: none;
-  transform: translateY(-50%);
-}
-
-.fdic-site-header__search input {
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.5rem 0.75rem 0.5rem 3.5rem;
-  border: 1px solid var(--ds-color-border-input, #8d9297);
-  border-radius: 0;
-  color: var(--fdic-text-primary, #212123);
-  background: var(--ds-color-bg-input, #fff);
-  font: inherit;
-}
-
-.fdic-site-header__nav {
-  display: flex;
-  gap: 1.5rem;
-  width: min(100% - 2rem, 82rem);
-  margin-inline: auto;
-  overflow-x: auto;
-  border-block-start: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 20%);
-}
-
-.fdic-site-header__nav a {
-  flex: 0 0 auto;
-  padding-block: 0.75rem;
-  color: inherit;
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-
 .fdic-page--front .fdic-breadcrumb-region,
 .fdic-page--front .block-system-breadcrumb-block,
 .fdic-page--front .node__content > .field {
@@ -389,6 +309,19 @@ fd-pagination:not(:defined) {
   max-width: none;
 }
 
+.fdicnet-page-header {
+  --fd-page-header-bg:
+    linear-gradient(90deg, oklch(from var(--ds-color-primary-900, #05314f) l c h / 96%), oklch(from var(--ds-color-primary-900, #05314f) l c h / 72%)),
+    linear-gradient(135deg, transparent 0 52%, oklch(from var(--ds-color-primary-400, #38b6ff) l c h / 38%) 52% 54%, transparent 54%),
+    repeating-linear-gradient(90deg, oklch(from var(--ds-color-neutral-000, #fff) l c h / 6%) 0 1px, transparent 1px 8rem),
+    linear-gradient(160deg, var(--ds-color-primary-800, #074c76), var(--ds-color-primary-900, #05314f));
+  --fd-page-header-max-width: 82rem;
+  --fd-page-header-padding-block: 2rem 1.25rem;
+  --fd-page-header-padding-inline: max(1rem, calc((100% - 82rem) / 2));
+  --fd-page-header-title-size: 2.25rem;
+  --fd-page-header-kicker-size: 0.875rem;
+}
+
 .fdicnet-home {
   --fdicnet-max: 82rem;
   --fdicnet-blue-deep: var(--ds-color-primary-900, #05314f);
@@ -400,43 +333,13 @@ fd-pagination:not(:defined) {
   color: var(--fdic-text-primary, #212123);
 }
 
-.fdicnet-hero {
-  color: var(--ds-color-text-inverted, #fff);
-  background:
-    linear-gradient(90deg, oklch(from var(--fdicnet-blue-deep) l c h / 96%), oklch(from var(--fdicnet-blue-deep) l c h / 72%)),
-    linear-gradient(135deg, transparent 0 52%, oklch(from var(--ds-color-primary-400, #38b6ff) l c h / 38%) 52% 54%, transparent 54%),
-    repeating-linear-gradient(90deg, oklch(from var(--ds-color-neutral-000, #fff) l c h / 6%) 0 1px, transparent 1px 8rem),
-    linear-gradient(160deg, var(--ds-color-primary-800, #074c76), var(--ds-color-primary-900, #05314f));
-}
-
-.fdicnet-hero__inner {
-  display: grid;
-  align-content: end;
-  width: min(100% - 2rem, var(--fdicnet-max));
-  min-height: 8.25rem;
-  margin-inline: auto;
-  padding-block: 2rem 1.25rem;
-}
-
-.fdicnet-hero__eyebrow {
-  margin: 0 0 0.25rem;
-  color: oklch(from var(--ds-color-neutral-000, #fff) l c h / 86%);
-  font-size: 0.875rem;
-}
-
-.fdicnet-hero h1 {
-  margin: 0;
-  color: inherit;
-  font-size: 2.25rem;
-  line-height: 1.1;
-}
-
 .fdicnet-section-nav {
   display: flex;
   gap: 1.5rem;
-  width: min(100% - 2rem, var(--fdicnet-max));
-  margin-inline: auto;
+  padding-inline: max(1rem, calc((100% - 82rem) / 2));
   overflow-x: auto;
+  color: var(--ds-color-text-inverted, #fff);
+  background: var(--ds-color-primary-900, #05314f);
   border-block-start: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 18%);
 }
 
@@ -740,102 +643,6 @@ fd-pagination:not(:defined) {
   justify-self: end;
 }
 
-.fdic-page-feedback {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  width: min(100% - 2rem, 82rem);
-  min-height: 5.75rem;
-  margin-inline: auto;
-  border-block-start: 1px solid var(--ds-color-border-subtle, #dfe1e2);
-}
-
-.fdic-page-feedback__prompt,
-.fdic-page-feedback__responses {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.fdic-page-feedback h2 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.fdic-page-feedback button,
-.fdic-page-feedback__report {
-  min-height: 2.75rem;
-  padding: 0.6rem 1.4rem;
-  border: 1px solid var(--ds-color-border-subtle, #dfe1e2);
-  border-radius: 0;
-  color: var(--fdic-text-primary, #212123);
-  background: var(--ds-color-bg-interactive, #f7f9fb);
-  font: inherit;
-  text-decoration: none;
-}
-
-.fdic-page-feedback__report::before {
-  content: "[!] ";
-}
-
-.fdic-site-footer__main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem 2rem;
-  align-items: center;
-  padding: 2rem max(1rem, calc((100% - 82rem) / 2));
-  border-block-start: 6px solid var(--ds-color-primary-400, #38b6ff);
-  color: var(--ds-color-text-inverted, #fff);
-  background: var(--ds-color-bg-brand, #05314f);
-}
-
-.fdic-site-footer__brand {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.fdic-site-footer__brand img {
-  width: 5rem;
-  height: 2.5rem;
-  object-fit: cover;
-  background: var(--ds-color-bg-surface, #fff);
-}
-
-.fdic-site-footer__agency {
-  margin: 0;
-  font-weight: 700;
-}
-
-.fdic-site-footer__links {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: end;
-}
-
-.fdic-site-footer__links a {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border: 1px solid oklch(from var(--ds-color-neutral-000, #fff) l c h / 28%);
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.fdic-site-footer__updated {
-  grid-column: 2;
-  margin: 0;
-  font-size: 0.875rem;
-}
-
-.fdic-site-footer a {
-  color: inherit;
-}
-
-.fdic-site-header__nav a:hover,
 .fdicnet-section-nav a:hover {
   text-decoration: underline;
 }
@@ -868,34 +675,8 @@ fd-pagination:not(:defined) {
 }
 
 @media (max-width: 47.999rem) {
-  .fdic-site-header__masthead,
-  .fdic-page-feedback,
-  .fdic-page-feedback__prompt,
-  .fdic-site-footer__brand {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .fdic-site-header__masthead {
-    gap: 1rem;
-    padding-block: 1rem;
-  }
-
-  .fdic-site-header__search {
-    width: 100%;
-  }
-
-  .fdic-site-header__nav,
   .fdicnet-section-nav {
     gap: 1rem;
-  }
-
-  .fdicnet-hero__inner {
-    min-height: 7rem;
-  }
-
-  .fdicnet-hero h1 {
-    font-size: 1.75rem;
   }
 
   .fdicnet-news,
@@ -904,8 +685,7 @@ fd-pagination:not(:defined) {
   .fdicnet-link-categories,
   .fdicnet-events__grid,
   .fdicnet-people-social,
-  .fdicnet-social__content,
-  .fdic-site-footer__main {
+  .fdicnet-social__content {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -932,26 +712,8 @@ fd-pagination:not(:defined) {
     grid-template-columns: 3rem minmax(0, 1fr);
   }
 
-  .fdic-page-feedback {
-    padding-block: 1rem;
-  }
-
-  .fdic-page-feedback__responses {
-    width: 100%;
-  }
-
-  .fdic-page-feedback button,
-  .fdic-page-feedback__report {
-    flex: 1 1 0;
-    text-align: center;
-  }
-
-  .fdic-site-footer__links {
-    justify-content: start;
-  }
-
-  .fdic-site-footer__updated {
-    grid-column: auto;
+  .fdicnet-page-header {
+    --fd-page-header-title-size-mobile: 1.75rem;
   }
 }
 

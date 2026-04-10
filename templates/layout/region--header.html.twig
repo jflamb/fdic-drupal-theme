@@ -4,22 +4,45 @@
  * Theme override for the header region.
  */
 #}
-<header class="fdic-site-header" role="banner">
-  <div class="fdic-site-header__masthead">
-    <a class="fdic-site-header__wordmark" href="{{ path('<front>') }}" aria-label="{{ 'FDICnet home'|t }}">
-      <span class="fdic-site-header__fdic">FDIC</span><span class="fdic-site-header__net">net</span>
-    </a>
-    <form class="fdic-site-header__search" action="{{ path('<front>') }}" method="get" role="search">
-      <label class="fdic-visually-hidden" for="fdic-header-search">{{ 'Search FDICnet'|t }}</label>
-      <input id="fdic-header-search" name="keys" type="search" placeholder="{{ 'Search FDICnet'|t }}">
-    </form>
-  </div>
-  <nav class="fdic-site-header__nav" aria-label="{{ 'Primary navigation'|t }}">
-    <a href="{{ path('<front>') }}">{{ 'News & Events'|t }}</a>
-    <a href="{{ path('<front>') }}#career">{{ 'Career Development & Training'|t }}</a>
-    <a href="{{ path('<front>') }}#knowledge">{{ 'Knowledge Base'|t }}</a>
-    <a href="{{ path('<front>') }}#benefits">{{ 'Benefits'|t }}</a>
-    <a href="{{ path('<front>') }}#services">{{ 'Employee Services'|t }}</a>
-    <a href="{{ path('<front>') }}#about">{{ 'About'|t }}</a>
-  </nav>
-</header>
+{{ attach_library('fdic/global-header') }}
+
+{% set header_source = {
+  items: [
+    {
+      title: 'News & Events'|t,
+      url: path('<front>') ~ '#news',
+      current: is_front|default(false),
+    },
+    {
+      title: 'Career Development & Training'|t,
+      url: path('<front>') ~ '#career',
+    },
+    {
+      title: 'Knowledge Base'|t,
+      url: path('<front>') ~ '#knowledge',
+    },
+    {
+      title: 'Benefits'|t,
+      url: path('<front>') ~ '#benefits',
+    },
+    {
+      title: 'Employee Services'|t,
+      url: path('<front>') ~ '#services',
+    },
+    {
+      title: 'About'|t,
+      url: path('<front>') ~ '#about',
+    },
+  ],
+  search: {
+    action: path('<front>'),
+    paramName: 'keys',
+    label: 'Search FDICnet'|t,
+    placeholder: 'Search FDICnet'|t,
+    searchAllLabel: 'Search all FDICnet'|t,
+  }
+} %}
+
+<fd-global-header data-fdic-global-header>
+  <script type="application/json" data-fdic-global-header-source>{{ header_source|json_encode(constant('JSON_HEX_TAG'))|raw }}</script>
+</fd-global-header>

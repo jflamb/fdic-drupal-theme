@@ -32,6 +32,9 @@ global-header:
 # Theme glue CSS consumes DS tokens and styles Drupal-specific layout/templates.
 theme:
   js:
+    js/design-system-init.js:
+      attributes:
+        type: module
     js/form-fallback-init.js:
       attributes:
         type: module

@@ -87,21 +87,6 @@ function _fdic_seed_set_front_page(Node $node): void {
 
 $home_body = <<<'HTML'
 <div class="fdicnet-home">
-  <header class="fdicnet-hero" aria-labelledby="fdicnet-home-title">
-    <div class="fdicnet-hero__inner">
-      <p class="fdicnet-hero__eyebrow">Washington, DC | 76F | Mostly Sunny</p>
-      <h1 id="fdicnet-home-title">Good morning, Amy</h1>
-    </div>
-    <nav class="fdicnet-section-nav" aria-label="FDICnet sections">
-      <a href="#news">News &amp; Events</a>
-      <a href="#career">Career Development &amp; Training</a>
-      <a href="#knowledge">Knowledge Base</a>
-      <a href="#benefits">Benefits</a>
-      <a href="#services">Employee Services</a>
-      <a href="#about">About</a>
-    </nav>
-  </header>
-
   <section id="news" class="fdicnet-section fdicnet-news" aria-labelledby="fdicnet-news-title">
     <div class="fdicnet-news__feature">
       <h2 id="fdicnet-news-title">Featured Story</h2>

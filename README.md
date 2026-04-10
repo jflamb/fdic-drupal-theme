@@ -28,13 +28,13 @@ The theme emits a small import map for `@fdic-ds/components/fd-global-header-dru
 
 See `docs/_theming.md` for deployment requirements around installed npm assets.
 
-The header region renders a static FDICnet-style example header for the GitHub Pages snapshot. The `fdic/global-header` library remains registered for future adapter work, but the snapshot header is intentionally plain Twig markup so it exports predictably.
+The header region renders `<fd-global-header>` and initializes it with Drupal-shaped navigation data through `js/global-header-init.js`. The GitHub Pages snapshot therefore exercises the same Design System global header component as the DDEV-rendered Drupal site.
 
 The pager template passes `current-page`, `total-pages`, and `href-template` to `<fd-pagination>`. Drupal's pager labels are 1-indexed, but the `?page=` query value is 0-indexed; `js/pagination-init.js` adapts the component's 1-indexed page requests back to Drupal URLs. A `<noscript>` fallback keeps plain Drupal pager links available when JavaScript is disabled.
 
 Form templates keep native Drupal controls and labels as fallbacks for form-associated custom elements. `js/form-fallback-init.js` disables those fallbacks only after the matching FDIC custom element is defined, so checkbox, radio, text input, textarea, and select controls remain submittable when JavaScript is disabled or component registration fails. Select elements with optgroups intentionally stay native until the design system exposes a compatible grouped option API.
 
-The page template renders a static example feedback area and footer so the DDEV-exported GitHub Pages snapshot has complete global chrome even when no footer blocks are placed.
+The page template renders `<fd-page-feedback>` and `<fd-global-footer>` so the DDEV-exported GitHub Pages snapshot has complete Design System global chrome even when no footer blocks are placed. Footer utility and social links are initialized from static JSON by `js/design-system-init.js`.
 
 The header search defaults are stored in `config/install/fdic.settings.yml` and read through theme settings:
 

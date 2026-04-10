@@ -71,6 +71,10 @@ function relativeReference(fromOutput, toOutput) {
   return relative || path.posix.basename(toOutput);
 }
 
+function moduleSpecifierReference(reference) {
+  return /^(\.|\/|[a-z][a-z0-9+.-]*:)/i.test(reference) ? reference : `./${reference}`;
+}
+
 function isSkippableUrl(value) {
   return /^(#|mailto:|tel:|javascript:|data:)/i.test(value.trim());
 }
@@ -100,6 +104,43 @@ function enqueueAsset(url) {
   return assetSeen.get(key);
 }
 
+function resolveJsModuleSpecifier(value, currentUrl) {
+  if (value === 'lit') {
+    return new URL('/themes/custom/fdic/node_modules/lit/index.js', baseUrl);
+  }
+
+  if (value === 'lit-html') {
+    return new URL('/themes/custom/fdic/node_modules/lit-html/lit-html.js', baseUrl);
+  }
+
+  if (value === 'lit-element') {
+    return new URL('/themes/custom/fdic/node_modules/lit-element/index.js', baseUrl);
+  }
+
+  if (value === '@lit/reactive-element') {
+    return new URL('/themes/custom/fdic/node_modules/@lit/reactive-element/reactive-element.js', baseUrl);
+  }
+
+  if (value === '@xmldom/xmldom') {
+    return new URL('/themes/custom/fdic/js/xmldom-browser-shim.js', baseUrl);
+  }
+
+  if (value.startsWith('lit/')) {
+    return new URL(`/themes/custom/fdic/node_modules/${value}`, baseUrl);
+  }
+
+  if (value.startsWith('lit-html/') || value.startsWith('lit-element/')) {
+    return new URL(`/themes/custom/fdic/node_modules/${value}`, baseUrl);
+  }
+
+  if (value.startsWith('@lit/')) {
+    const hasFileExtension = /\.[a-z0-9]+$/i.test(value);
+    return new URL(`/themes/custom/fdic/node_modules/${value}${hasFileExtension ? '' : '/index.js'}`, baseUrl);
+  }
+
+  return new URL(value, currentUrl);
+}
+
 function discoverSrcset(value, currentUrl, currentOutput) {
   return value.split(',')
     .map((part) => {
@@ -127,7 +168,7 @@ function rewriteHtml(html, currentUrl, currentOutput) {
     return ` ${attr}="${discoverSrcset(value, currentUrl, currentOutput)}"`;
   });
 
-  rewritten = rewritten.replace(/\s(href|src|action)=["']([^"']+)["']/gi, (match, attr, value) => {
+  rewritten = rewritten.replace(/\s(href|src|action|survey-href|agency-href)=["']([^"']+)["']/gi, (match, attr, value) => {
     if (isSkippableUrl(value)) {
       return match;
     }
@@ -139,11 +180,14 @@ function rewriteHtml(html, currentUrl, currentOutput) {
     }
 
     const mappedPage = pageMap.get(pageKey(targetUrl));
-    if ((attr.toLowerCase() === 'href' || attr.toLowerCase() === 'action') && mappedPage) {
+    const attrName = attr.toLowerCase();
+    const isPageReferenceAttr = ['href', 'action', 'survey-href', 'agency-href'].includes(attrName);
+
+    if (isPageReferenceAttr && mappedPage) {
       return ` ${attr}="${relativeReference(currentOutput, mappedPage)}${targetUrl.hash}"`;
     }
 
-    if (attr.toLowerCase() === 'href') {
+    if (attrName === 'href') {
       if (!isLikelyAsset(targetUrl)) {
         return match;
       }
@@ -156,7 +200,7 @@ function rewriteHtml(html, currentUrl, currentOutput) {
       return ` ${attr}="${relativeReference(currentOutput, assetOutput)}"`;
     }
 
-    if (attr.toLowerCase() === 'src') {
+    if (attrName === 'src') {
       const assetOutput = enqueueAsset(targetUrl);
       if (!assetOutput) {
         return match;
@@ -168,11 +212,20 @@ function rewriteHtml(html, currentUrl, currentOutput) {
     return match;
   });
 
-  rewritten = rewritten.replace(/"([^"]+)":"(\\\/[^"]+)"/g, (match, specifier, escapedValue) => {
+  rewritten = rewritten.replace(/"([^"]+)":"(\\\/[^"]*)"/g, (match, specifier, escapedValue) => {
     const value = escapedValue.replace(/\\\//g, '/');
     const targetUrl = new URL(value, currentUrl);
 
-    if (!sameOrigin(targetUrl) || !isLikelyAsset(targetUrl)) {
+    if (!sameOrigin(targetUrl)) {
+      return match;
+    }
+
+    const mappedPage = pageMap.get(pageKey(targetUrl));
+    if (mappedPage) {
+      return `"${specifier}":"${relativeReference(currentOutput, mappedPage)}${targetUrl.hash}"`;
+    }
+
+    if (!isLikelyAsset(targetUrl)) {
       return match;
     }
 
@@ -181,7 +234,7 @@ function rewriteHtml(html, currentUrl, currentOutput) {
       return match;
     }
 
-    return `"${specifier}":"${relativeReference(currentOutput, assetOutput)}"`;
+    return `"${specifier}":"${moduleSpecifierReference(relativeReference(currentOutput, assetOutput))}"`;
   });
 
   return rewritten;
@@ -214,6 +267,32 @@ function rewriteCss(css, currentUrl, currentOutput) {
     }
 
     return `@import ${quote}${relativeReference(currentOutput, assetOutput)}${quote}`;
+  });
+}
+
+function rewriteJs(js, currentUrl, currentOutput) {
+  const moduleSpecifierPattern = /((?:\.{1,2}\/)?chunk-[^'"]+\.js|\.{1,2}\/[^'"]+|lit(?:\/[^'"]+)?|lit-html(?:\/[^'"]+)?|lit-element(?:\/[^'"]+)?|@lit\/[^'"]+|@xmldom\/xmldom)/;
+  const importPattern = new RegExp(`(\\bimport\\s*(?:[^'"]*?from\\s*)?|import\\s*\\(\\s*)(['"])${moduleSpecifierPattern.source}\\2`, 'g');
+  const exportPattern = new RegExp(`(\\bexport\\s*(?:[^'"]+\\s*)?from\\s*)(['"])${moduleSpecifierPattern.source}\\2`, 'g');
+
+  return js.replace(importPattern, (match, prefix, quote, value) => {
+    const assetUrl = resolveJsModuleSpecifier(value, currentUrl);
+    const assetOutput = enqueueAsset(assetUrl);
+
+    if (!assetOutput) {
+      return match;
+    }
+
+    return `${prefix}${quote}${moduleSpecifierReference(relativeReference(currentOutput, assetOutput))}${quote}`;
+  }).replace(exportPattern, (match, prefix, quote, value) => {
+    const assetUrl = resolveJsModuleSpecifier(value, currentUrl);
+    const assetOutput = enqueueAsset(assetUrl);
+
+    if (!assetOutput) {
+      return match;
+    }
+
+    return `${prefix}${quote}${moduleSpecifierReference(relativeReference(currentOutput, assetOutput))}${quote}`;
   });
 }
 
@@ -257,6 +336,12 @@ for (let index = 0; index < assetQueue.length; index += 1) {
   if (contentType.includes('text/css') || url.pathname.endsWith('.css')) {
     const css = await response.text();
     await writeOutput(output, rewriteCss(css, url, output));
+    continue;
+  }
+
+  if (contentType.includes('javascript') || /\.(mjs|js)$/i.test(url.pathname)) {
+    const js = await response.text();
+    await writeOutput(output, rewriteJs(js, url, output));
     continue;
   }
 
