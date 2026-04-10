@@ -152,12 +152,10 @@ jobs:
       # Write GitHub Packages auth for the @jflamb-backed npm aliases.
       - env:
           FDIC_DS_NPM_TOKEN: ${{ secrets.FDIC_DS_NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          if [ -z "$FDIC_DS_NPM_TOKEN" ]; then
-            echo "FDIC_DS_NPM_TOKEN is required." >&2
-            exit 1
-          fi
-          printf '//npm.pkg.github.com/:_authToken=%s\n' "$FDIC_DS_NPM_TOKEN" >> .npmrc
+          token="${FDIC_DS_NPM_TOKEN:-$GITHUB_TOKEN}"
+          printf '//npm.pkg.github.com/:_authToken=%s\n' "$token" >> .npmrc
 
       # Install DDEV (Linux).
       - run: curl -fsSL https://pkg.ddev.com/apt/gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/ddev.gpg > /dev/null
@@ -174,7 +172,7 @@ Requirements:
 
 - Docker available on the runner (GitHub-hosted Ubuntu runners include it)
 - DDEV installed (see install commands above or the [DDEV docs](https://ddev.readthedocs.io/en/stable/users/install/))
-- A repository secret (`FDIC_DS_NPM_TOKEN`) with a GitHub token that has `read:packages` scope for the `@jflamb` packages, written into `.npmrc` before `npm ci` or the bootstrap runs
+- `packages: read` permission for the workflow's `GITHUB_TOKEN`, or a repository secret (`FDIC_DS_NPM_TOKEN`) with a GitHub token that has `read:packages` scope for the `@jflamb` packages, written into `.npmrc` before `npm ci` or the bootstrap runs
 
 ## Design System Updates
 
