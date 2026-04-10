@@ -1,3 +1,5 @@
+import './custom-icons.js';
+
 const parseJsonSource = (source, label) => {
   if (!source?.trim()) {
     return null;
