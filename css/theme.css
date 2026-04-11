@@ -350,11 +350,6 @@ fd-pagination:not(:defined) {
 }
 
 .fdic-page--front fd-global-header[data-fdic-global-header] {
-  --fd-global-header-shell-max-width: var(--fdicnet-content-column-max);
-  --fd-global-header-shell-inline-gutter: calc(2 * var(--fdicnet-content-padding));
-  --fd-global-header-shell-inline-gutter-tablet: 4rem;
-  --fd-global-header-panel-inline-gutter: calc(2 * var(--fdicnet-content-padding));
-
   display: block;
   background-image:
     linear-gradient(121deg, rgb(0 50 86 / 100%) 3%, rgb(7 60 91 / 60%) 94%),
@@ -573,13 +568,6 @@ fd-pagination:not(:defined) {
 }
 
 .fdicnet-events__list {
-  --fd-event-date-size: 56px;
-  --fd-event-gap: 16px;
-  --fd-event-title-font-size: 22px;
-  --fd-event-title-font-weight: 600;
-  --fd-event-content-gap: 4px;
-  --fd-event-link-color: var(--ds-color-text-warm, #44340e);
-  --fd-event-metadata-color: var(--fdic-text-secondary, #595961);
 }
 
 .fdicnet-people-social .fdicnet-section__inner {
