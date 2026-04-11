@@ -289,6 +289,10 @@ fd-pagination:not(:defined) {
   display: none;
 }
 
+.fdic-page--front .fdic-content-region > .block + .block {
+  margin-block-start: 0;
+}
+
 .fdic-page--front .fdic-main-layout {
   width: 100%;
   max-width: none;
@@ -345,11 +349,16 @@ fd-pagination:not(:defined) {
   color: var(--fdic-text-primary, #212123);
 }
 
+fd-global-header[data-fdic-global-header] {
+  position: relative;
+  z-index: 10;
+}
+
 .fdic-page--front fd-global-header[data-fdic-global-header] {
   --fd-global-header-shell-max-width: var(--fdicnet-content-column-max);
   --fd-global-header-shell-inline-gutter: calc(2 * var(--fdicnet-content-padding));
   --fd-global-header-shell-inline-gutter-tablet: 4rem;
-  --fd-global-header-panel-inline-gutter: 5rem;
+  --fd-global-header-panel-inline-gutter: calc(2 * var(--fdicnet-content-padding));
 
   display: block;
   background-image:
@@ -538,7 +547,8 @@ fd-pagination:not(:defined) {
 
 .fdicnet-link-category h2 {
   position: relative;
-  padding-block-end: 0.75rem;
+  padding-block-end: calc(1.25rem + 4px);
+  margin-block-end: 1.25rem;
   font-size: 1.15rem;
 }
 
@@ -546,30 +556,35 @@ fd-pagination:not(:defined) {
   position: absolute;
   inset-block-end: 0;
   inset-inline-start: 0;
-  width: 4.5rem;
-  height: 3px;
+  width: 5rem;
+  height: 4px;
   background: var(--ds-color-primary-400, #38b6ff);
   content: "";
 }
 
+.fdicnet-link-category a {
+  font-weight: 400;
+}
+
 .fdicnet-link-category ul {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.5rem;
   padding: 0;
   list-style: none;
 }
 
 .fdicnet-events {
-  border-block: 1px solid var(--ds-color-secondary-300, #e0c875);
   background: var(--fdicnet-gold-soft);
 }
 
 .fdicnet-events__list {
-  --fd-event-list-col-3-gap: 2rem;
-  --fd-event-list-col-3-max: 24rem;
-  --fd-event-title-color: var(--fdicnet-blue);
-  --fd-event-link-color: var(--fdicnet-blue);
-  --fd-event-metadata-color: var(--fdic-text-secondary, #565c65);
+  --fd-event-date-size: 56px;
+  --fd-event-gap: 16px;
+  --fd-event-title-font-size: 22px;
+  --fd-event-title-font-weight: 600;
+  --fd-event-content-gap: 4px;
+  --fd-event-link-color: var(--ds-color-text-warm, #44340e);
+  --fd-event-metadata-color: var(--fdic-text-secondary, #595961);
 }
 
 .fdicnet-people-social .fdicnet-section__inner {
