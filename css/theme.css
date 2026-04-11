@@ -349,11 +349,6 @@ fd-pagination:not(:defined) {
   color: var(--fdic-text-primary, #212123);
 }
 
-fd-global-header[data-fdic-global-header] {
-  position: relative;
-  z-index: 10;
-}
-
 .fdic-page--front fd-global-header[data-fdic-global-header] {
   --fd-global-header-shell-max-width: var(--fdicnet-content-column-max);
   --fd-global-header-shell-inline-gutter: calc(2 * var(--fdicnet-content-padding));
