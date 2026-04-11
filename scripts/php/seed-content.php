@@ -237,13 +237,17 @@ $home_body = <<<'HTML'
       <article class="fdicnet-social">
         <h2>FDIC on Social</h2>
         <div class="fdicnet-social__content">
-          <div>
-            <p>Read Acting Chairman Travis Hill&apos;s Statement on Executive Order, &quot;Guaranteeing Fair Banking For All Americans.&quot;</p>
-            <p><a href="https://fdic.gov/news/press-releases/2025/statement-acting-chairman-travis-hill-executive-order-titled-guaranteeing">https://fdic.gov/news/press-releases/2025/statement-acting-chairman-travis-hill-executive-order-titled-guaranteeing</a></p>
+          <div class="fdicnet-social__body">
+            <p class="fdicnet-social__lede">Read Acting Chairman Travis Hill&apos;s Statement on Executive Order, &quot;Guaranteeing Fair Banking For All Americans.&quot;</p>
+            <p class="fdicnet-social__link"><a href="https://fdic.gov/news/press-releases/2025/statement-acting-chairman-travis-hill-executive-order-titled-guaranteeing">https://fdic.gov/news/press-releases/2025/statement-acting-chairman-travis-hill-executive-order-titled-guaranteeing</a></p>
             <p class="fdicnet-meta">Posted Aug. 8, 2025 on…</p>
             <div class="fdicnet-social__platforms" aria-label="Social platforms">
-              <span class="fdicnet-social__platform" aria-hidden="true"><svg viewBox="0 0 256 256"><path d="M204.75,203.26a8,8,0,1,1-11.32,11.31L128,149.25,62.57,214.57a8,8,0,0,1-11.32-11.31L116.69,138,51.25,72.74A8,8,0,0,1,62.57,61.43L128,126.75l65.43-65.32a8,8,0,0,1,11.32,11.31L139.31,138Z"/></svg></span>
-              <span class="fdicnet-social__platform" aria-hidden="true"><svg viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM92,176a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm-8-88A12,12,0,1,1,96,76,12,12,0,0,1,84,88Zm100,88a8,8,0,0,1-16,0V136a24,24,0,0,0-48,0v40a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0v5.31A40,40,0,0,1,184,136Z"/></svg></span>
+              <a class="fdicnet-social__platform" href="https://x.com/fdicgov" aria-label="FDIC on X">
+                <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M204.75,203.26a8,8,0,1,1-11.32,11.31L128,149.25,62.57,214.57a8,8,0,0,1-11.32-11.31L116.69,138,51.25,72.74A8,8,0,0,1,62.57,61.43L128,126.75l65.43-65.32a8,8,0,0,1,11.32,11.31L139.31,138Z"/></svg>
+              </a>
+              <a class="fdicnet-social__platform" href="https://www.linkedin.com/company/fdic/" aria-label="FDIC on LinkedIn">
+                <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM92,176a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm-8-88A12,12,0,1,1,96,76,12,12,0,0,1,84,88Zm100,88a8,8,0,0,1-16,0V136a24,24,0,0,0-48,0v40a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0v5.31A40,40,0,0,1,184,136Z"/></svg>
+              </a>
             </div>
           </div>
           <div class="fdicnet-social-card" aria-hidden="true"><img src="/themes/custom/fdic/assets/fdicnet-social-card.png" alt=""></div>
