@@ -16,14 +16,14 @@ This is a Drupal theme that integrates `fdic-design-system` for use in Drupal CM
 When making changes:
 
 1. Make changes to source files (CSS, Twig templates, DS components)
-2. If DS components changed:
+2. If DS packages changed:
    - `cd /Users/jlamb/Projects/fdic-design-system && npm run build:components`
-   - `cp -r packages/components/dist/ /Users/jlamb/Projects/fdic-drupal-theme/node_modules/@fdic-ds/components/dist/`
+   - `cd /Users/jlamb/Projects/fdic-drupal-theme && npm install`
 3. Clear Drupal cache: `ddev drush cr`
-4. Re-export: `bash scripts/export-static.sh`
-5. Copy DS dist into the export: `cp -r node_modules/@fdic-ds/components/dist/ public/themes/custom/fdic/node_modules/@fdic-ds/components/dist/`
+4. Verify Drupal integration: `bash scripts/verify-ddev.sh`
+5. Re-export if needed: `bash scripts/export-static.sh`
 
-The export script crawls the live Drupal site and writes HTML + assets to `public/`. The DS component chunks in `public/themes/custom/fdic/node_modules/` must match the build vendored into `node_modules/` — the export does not automatically copy dynamically-imported JS module chunks.
+The export script crawls the live Drupal site and writes HTML + assets to `public/`. Do not copy or patch DS build outputs into this repository manually; the export should consume the installed package files already served by Drupal.
 
 ## Design System (`fdic-design-system`)
 
@@ -33,4 +33,4 @@ The companion design system lives at `/Users/jlamb/Projects/fdic-design-system`.
 - All component defaults (sizes, colors, spacing, typography, interactions) are owned by the DS.
 - If a change is needed, contribute it to the DS component source — do not override from the theme.
 - Layout tokens (`--ds-layout-*`) define the canonical page dimensions. DS components like the global header consume these directly.
-- After modifying DS source, rebuild with `npm run build:components` and vendor into the Drupal theme's `node_modules/`.
+- After modifying DS source, rebuild with `npm run build:components` and refresh the Drupal theme install with `npm install`.

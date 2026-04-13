@@ -26,6 +26,11 @@ assert_symlink() {
   [[ -L "$THEME_DIR/$path" ]] || die "$THEME_DIR/$path is not a symlink."
 }
 
+assert_file() {
+  local path="$1"
+  [[ -f "$THEME_DIR/$path" ]] || die "$THEME_DIR/$path is missing."
+}
+
 assert_http_head() {
   local url="$1"
   curl -fsSI "$url" >/dev/null || die "Expected HTTP 2xx response for $url"
@@ -59,7 +64,6 @@ main() {
     "css"
     "js"
     "templates"
-    "node_modules"
     "fdic.breakpoints.yml"
     "fdic.info.yml"
     "fdic.libraries.yml"
@@ -71,7 +75,10 @@ main() {
   for path in "${linked_paths[@]}"; do
     assert_symlink "$path"
   done
-  ok "Generated theme directory contains only expected symlinks"
+  assert_file "node_modules/@jflamb/fdic-ds-tokens/styles.css"
+  assert_file "node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js"
+  assert_file "node_modules/lit/index.js"
+  ok "Generated theme directory contains the expected symlinked source and staged npm runtime"
 
   local url
   url="$(ddev_url)"
@@ -79,8 +86,9 @@ main() {
 
   info "Checking rendered site and library assets"
   assert_http_head "$url/"
-  assert_http_head "$url/themes/custom/fdic/node_modules/@fdic-ds/tokens/semantic.css"
-  assert_http_head "$url/themes/custom/fdic/node_modules/@fdic-ds/components/dist/register/register-all.js"
+  assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-tokens/styles.css"
+  assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js"
+  assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-components/dist/fd-global-header-drupal.js"
   ok "DDEV site and FDIC Design System assets are reachable"
 }
 
