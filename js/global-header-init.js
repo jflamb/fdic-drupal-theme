@@ -1,4 +1,4 @@
-import { createFdGlobalHeaderContentFromDrupal } from '@fdic-ds/components/fd-global-header-drupal';
+import { createFdGlobalHeaderContentFromDrupal } from '@jflamb/fdic-ds-components/fd-global-header-drupal';
 import { globalHeaderStorySource } from './global-header-story-source.js';
 
 const parseJsonSource = (source) => {

@@ -1,10 +1,9 @@
-# Load semantic design tokens first so component styles and theme overrides can
-# resolve DS custom properties without a build step.
+# Load the canonical token stylesheet directly so Drupal serves the same public
+# token contract documented by the design system package.
 tokens:
   css:
     base:
-      # semantic.css imports interaction.css automatically.
-      node_modules/@fdic-ds/tokens/semantic.css: {}
+      node_modules/@jflamb/fdic-ds-tokens/styles.css: {}
 
 # Register the DS custom elements globally after tokens are available.
 components:
@@ -12,7 +11,7 @@ components:
     js/custom-icons.js:
       attributes:
         type: module
-    node_modules/@fdic-ds/components/dist/register/register-all.js:
+    node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js:
       attributes:
         type: module
   dependencies:
@@ -23,7 +22,7 @@ components:
 # for js/global-header-init.js's bare module specifier.
 global-header:
   js:
-    node_modules/@fdic-ds/components/dist/fd-global-header-drupal.js:
+    node_modules/@jflamb/fdic-ds-components/dist/fd-global-header-drupal.js:
       attributes:
         type: module
     js/global-header-init.js:

@@ -1,4 +1,4 @@
-import { iconRegistry } from '../node_modules/@fdic-ds/components/dist/index.js';
+import { iconRegistry } from '@jflamb/fdic-ds-components';
 
 // Extra icons sourced from @phosphor-icons/core regular-weight SVG assets.
 iconRegistry.register({

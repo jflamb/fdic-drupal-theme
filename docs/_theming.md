@@ -2,24 +2,29 @@
 
 ## Asset Loading
 
-This theme intentionally consumes FDIC Design System assets from `node_modules/@fdic-ds/`.
+This theme intentionally consumes FDIC Design System assets from the sibling `fdic-design-system` workspace and serves the installed package files from `node_modules/@jflamb/`.
 
-Deployment must run an authenticated `npm install` before Drupal serves the theme. The installed `node_modules/@fdic-ds` package files must be present wherever Drupal serves theme libraries.
+Deployment must run `npm install` before Drupal serves the theme. The installed `node_modules/@jflamb` package files must be present wherever Drupal serves theme libraries.
 
 The theme does not copy built design system files into the repository or into a generated vendor directory.
 
 ## Versioning
 
-`package.json` allows compatible `0.1.x` DS package updates. After the first authenticated install, commit `package-lock.json` to lock transitive dependencies as well.
+`package.json` points at sibling `file:` DS packages. Commit `package-lock.json` after installs so local checks and any replicated workspace setup use the same transitive dependency graph.
 
 ## Component Contracts
+
+Reusable CMS page composition should use the documented `fdic-composition-*`
+classes provided by `@jflamb/fdic-ds-components/styles.css`. Keep
+`css/theme.css` focused on Drupal shell glue and FDICnet-specific exceptions
+rather than re-implementing section, grid, or card layout patterns locally.
 
 Form templates use FDIC Design System form-associated custom elements that
 participate in native form submission via `ElementInternals`. Drupal form
 attributes (name, value, required, disabled, etc.) are passed directly to the
 DS host element, with no slotted native controls.
 
-When upgrading `@fdic-ds/components`, verify these host-attribute contracts:
+When upgrading `@jflamb/fdic-ds-components`, verify these host-attribute contracts:
 
 - `fd-input` receives all `<input>` attributes on the host
 - `fd-textarea` receives all `<textarea>` attributes; value as text content

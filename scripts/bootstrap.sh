@@ -3,7 +3,6 @@
 # Idempotent — safe to re-run. Each step skips if already completed.
 #
 # Prerequisites: ddev, docker, node 18+, npm
-# GitHub Packages auth must be configured for the published FDIC Design System packages.
 #
 # Usage:
 #   scripts/bootstrap.sh          # full setup
@@ -15,6 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 DRUPAL_DIR="$PROJECT_ROOT/drupal"
 THEME_DIR="$DRUPAL_DIR/web/themes/custom/fdic"
+DS_ROOT="$PROJECT_ROOT/../fdic-design-system"
 
 # Container-relative paths (DDEV mounts project root at /var/www/html).
 CONTAINER_DRUPAL_DIR="/var/www/html/drupal"
@@ -153,7 +153,6 @@ link_theme() {
     "css"
     "js"
     "templates"
-    "node_modules"
     "fdic.breakpoints.yml"
     "fdic.info.yml"
     "fdic.libraries.yml"
@@ -169,10 +168,29 @@ link_theme() {
   ok "Theme files linked at $THEME_DIR"
 }
 
+stage_theme_node_modules() {
+  info "Staging browser-served npm runtime into Drupal theme"
+
+  local runtime_root="$THEME_DIR/node_modules"
+  local ds_node_modules="$DS_ROOT/node_modules"
+  rm -rf "$runtime_root"
+  mkdir -p "$runtime_root/@jflamb" "$runtime_root/@lit" "$runtime_root/@xmldom"
+
+  cp -LR "$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-components" "$runtime_root/@jflamb/"
+  cp -LR "$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-tokens" "$runtime_root/@jflamb/"
+  cp -R "$ds_node_modules/lit" "$runtime_root/"
+  cp -R "$ds_node_modules/lit-html" "$runtime_root/"
+  cp -R "$ds_node_modules/lit-element" "$runtime_root/"
+  cp -R "$ds_node_modules/@lit/reactive-element" "$runtime_root/@lit/"
+  cp -R "$ds_node_modules/@xmldom/xmldom" "$runtime_root/@xmldom/"
+
+  ok "Runtime npm packages staged into $runtime_root"
+}
+
 install_theme_deps() {
   # Check for actual required files, not just the directory existing.
-  local tokens_css="$PROJECT_ROOT/node_modules/@fdic-ds/tokens/semantic.css"
-  local register_js="$PROJECT_ROOT/node_modules/@fdic-ds/components/dist/register/register-all.js"
+  local tokens_css="$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-tokens/styles.css"
+  local register_js="$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js"
 
   if [[ -f "$tokens_css" ]] && [[ -f "$register_js" ]]; then
     info "Theme npm deps already installed"
@@ -181,15 +199,14 @@ install_theme_deps() {
 
   info "Installing theme npm dependencies"
   (cd "$PROJECT_ROOT" && npm install) || {
-    warn "npm install failed — check GitHub Packages authentication."
-    warn "Ensure //npm.pkg.github.com/:_authToken is set in ~/.npmrc"
-    warn "See README.md section 'GitHub Packages' for setup instructions."
-    die "Cannot continue without @fdic-ds packages."
+    warn "npm install failed."
+    warn "Ensure the sibling fdic-design-system repository exists at ../fdic-design-system"
+    die "Cannot continue without the local @jflamb FDIC Design System packages."
   }
 
   # Verify the critical files actually arrived.
   if [[ ! -f "$tokens_css" ]] || [[ ! -f "$register_js" ]]; then
-    die "@fdic-ds packages installed but expected files are missing. Check package versions."
+    die "@jflamb FDIC Design System packages installed but expected files are missing. Check the sibling workspace packages."
   fi
 
   ok "npm dependencies installed"
@@ -260,6 +277,7 @@ main() {
   create_drupal_project
   link_theme
   install_theme_deps
+  stage_theme_node_modules
   install_drupal_site
   enable_theme
   place_blocks

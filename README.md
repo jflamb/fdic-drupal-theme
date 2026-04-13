@@ -1,12 +1,12 @@
 # FDIC Drupal Theme
 
-Drupal 10+ theme that consumes the FDIC Design System npm packages directly from `node_modules/@fdic-ds/`.
+Drupal 10+ theme that consumes the FDIC Design System directly from the sibling `fdic-design-system` workspace and serves the installed package artifacts from `node_modules/@jflamb/`.
 
 ## Prerequisites
 
 - Drupal 10.2+
 - Node 18+
-- npm with GitHub Packages access for the published `@jflamb` FDIC Design System packages
+- sibling checkout of `/Users/jlamb/Projects/fdic-design-system`
 - Drush
 
 ## Install
@@ -18,13 +18,13 @@ drush cr
 
 Install dependencies with the committed `package-lock.json` so local checks and CI use the same package graph.
 
-The theme does not require bundling or a postinstall asset copy. Drupal libraries point directly at published files under `node_modules/@fdic-ds/`:
+The theme does not require bundling or a postinstall asset copy. Drupal libraries point directly at installed package files under `node_modules/@jflamb/`:
 
-- `node_modules/@fdic-ds/tokens/semantic.css` loads the token CSS.
-- `node_modules/@fdic-ds/components/dist/register/register-all.js` registers the FDIC web components as ES modules.
-- `node_modules/@fdic-ds/components/dist/fd-global-header-drupal.js` remains available for Drupal menu adapter experiments.
+- `node_modules/@jflamb/fdic-ds-tokens/styles.css` loads the canonical token runtime.
+- `node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js` registers the FDIC web components as ES modules.
+- `node_modules/@jflamb/fdic-ds-components/dist/fd-global-header-drupal.js` remains available for Drupal menu adapter experiments.
 
-The theme emits a small import map for `@fdic-ds/components/fd-global-header-drupal` so local glue modules can use the package export-style specifier while Drupal still serves the published file from the installed theme assets.
+The theme emits a small import map so local glue modules can use the package export-style specifiers `@jflamb/fdic-ds-components` and `@jflamb/fdic-ds-components/fd-global-header-drupal` while Drupal still serves the installed files directly from the theme assets.
 
 See `docs/_theming.md` for deployment requirements around installed npm assets.
 
@@ -44,9 +44,9 @@ The header search defaults are stored in `config/install/fdic.settings.yml` and 
 
 ## Tokens
 
-The npm token package is canonical for this theme. Use the `--ds-*` custom properties published by `@fdic-ds/tokens`, including semantic colors such as `--ds-color-{role}-{variant}`, focus tokens such as `--ds-focus-ring-*`, and motion tokens such as `--ds-motion-*`.
+The npm token package is canonical for this theme. Use the FDIC public tokens exported by `@jflamb/fdic-ds-tokens/styles.css`, especially the shared `--fdic-color-*`, `--fdic-spacing-*`, `--fdic-layout-*`, `--fdic-font-*`, and focus-ring tokens that the design system components already consume.
 
-`css/theme.css` defines a small compatibility alias set for common `--fdic-*` names used in prose and older docs. New theme CSS should still prefer `--ds-*` tokens. If more legacy token names are needed, add them to that alias block rather than mixing raw fallback values into component CSS.
+`css/theme.css` is intentionally limited to Drupal shell layout, prose/table wrappers, fallback visibility, and FDICnet-specific decorative exceptions. Reusable page composition now comes from the documented `fdic-composition-*` classes shipped in `@jflamb/fdic-ds-components/styles.css`. The theme should not introduce token aliases or restyle FDIC components internally.
 
 ## Theme Base
 
@@ -54,11 +54,14 @@ This theme uses `base theme: false` so Drupal does not add Stable9 compatibility
 
 The theme also disables common System/Stable9 compatibility CSS libraries that are replaced by local templates and Design System components. Keep functional Drupal core JavaScript libraries enabled unless a replacement behavior is implemented locally.
 
-## GitHub Packages
+## Dependency Source
 
-Authenticate npm to GitHub Packages before running `npm install`. GitHub documents the required npm token setup at [Working with the npm registry](https://docs.github.com/packages/working-with-a-github-packages-registry/working-with-the-npm-registry).
+Phase 1 uses sibling workspace dependencies:
 
-The theme keeps `@fdic-ds/*` dependency names as npm aliases so Drupal library paths remain stable under `node_modules/@fdic-ds/`. The published packages currently live under the GitHub Packages owner scope `@jflamb`.
+- `@jflamb/fdic-ds-components` → `file:../fdic-design-system/packages/components`
+- `@jflamb/fdic-ds-tokens` → `file:../fdic-design-system/packages/tokens`
+
+That removes the vendored tarball flow and keeps the Drupal theme aligned with the design system's published package surface. For local verification, keep both repositories as siblings under `/Users/jlamb/Projects`.
 
 ## Theme Services
 
@@ -74,7 +77,8 @@ DDEV is the canonical Drupal integration environment for this theme. Static outp
 
 - Docker Desktop (or OrbStack / Colima)
 - [DDEV](https://ddev.readthedocs.io/en/stable/) (`brew install ddev/ddev/ddev`)
-- Node 18+ and npm with GitHub Packages auth for the published `@jflamb` packages
+- Node 18+ and npm
+- sibling checkout of `/Users/jlamb/Projects/fdic-design-system`
 
 ### Quick start
 
@@ -108,7 +112,7 @@ The theme repo is the DDEV project. `.ddev/config.yaml` points `docroot` at `dru
 2. Runs `ddev composer create drupal/recommended-project:^10` inside `drupal/`
 3. Installs Drush (`drush/drush`) if not already present
 4. Creates `drupal/web/themes/custom/fdic` and links the theme's Drupal files and asset directories into it
-5. Runs `npm install` for the theme's `@fdic-ds` dependencies
+5. Runs `npm install` for the theme's sibling `@jflamb` design-system dependencies
 6. Installs Drupal with the standard profile
 7. Enables and sets the FDIC theme as default
 8. Places blocks in the theme's regions (header, content, breadcrumb, highlighted)
@@ -119,20 +123,21 @@ The theme repo is the DDEV project. `.ddev/config.yaml` points `docroot` at `dru
 
 ### Linked theme directory
 
-The generated `drupal/web/themes/custom/fdic` directory is not a symlink to the repository root. Instead, the bootstrap script recreates it as a small directory containing relative symlinks to the files and directories Drupal needs:
+The generated `drupal/web/themes/custom/fdic` directory is not a symlink to the repository root. Instead, the bootstrap script recreates it as a small directory containing relative symlinks to the Drupal-owned source files plus a staged runtime copy of the browser-served npm packages Drupal needs:
 
 - `config/`
 - `css/`
 - `js/`
 - `templates/`
-- `node_modules/`
 - `fdic.breakpoints.yml`
 - `fdic.info.yml`
 - `fdic.libraries.yml`
 - `fdic.theme`
 - `logo.svg`
 
-This preserves live local edits while preventing Drupal extension discovery from recursing through the generated `drupal/` application.
+The staged runtime currently includes `@jflamb/fdic-ds-components`, `@jflamb/fdic-ds-tokens`, `lit`, `lit-html`, `lit-element`, `@lit/reactive-element`, and `@xmldom/xmldom`.
+
+This preserves live local edits while preventing Drupal extension discovery from recursing through the generated `drupal/` application and while keeping Drupal from serving cross-repository symlinks out of `node_modules/`.
 
 ### Static Snapshot
 
@@ -158,53 +163,20 @@ scripts/export-static.sh
 
 The committed workflow at `.github/workflows/theme-ci.yml` runs npm checks, bootstraps DDEV, verifies the Drupal integration, and, on pushes to `main`, exports `public/` as a GitHub Pages artifact and deploys it with GitHub Actions. Pull requests run the checks without deploying.
 
-A minimal GitHub Actions job looks like this:
-
-```yaml
-jobs:
-  theme-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      # Write GitHub Packages auth for the @jflamb-backed npm aliases.
-      - env:
-          FDIC_DS_NPM_TOKEN: ${{ secrets.FDIC_DS_NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          token="${FDIC_DS_NPM_TOKEN:-$GITHUB_TOKEN}"
-          printf '//npm.pkg.github.com/:_authToken=%s\n' "$token" >> .npmrc
-
-      # Install DDEV (Linux).
-      - run: curl -fsSL https://pkg.ddev.com/apt/gpg.key | gpg --dearmor | sudo tee /usr/share/keyrings/ddev.gpg > /dev/null
-      - run: echo "deb [signed-by=/usr/share/keyrings/ddev.gpg] https://pkg.ddev.com/apt/ * *" | sudo tee /etc/apt/sources.list.d/ddev.list
-      - run: sudo apt-get update && sudo apt-get install -y ddev
-
-      - run: npm ci
-      - run: npm test
-      - run: scripts/bootstrap.sh
-      - run: scripts/verify-ddev.sh
-      - run: scripts/export-static.sh
-```
-
 Requirements:
 
 - Docker available on the runner (GitHub-hosted Ubuntu runners include it)
 - DDEV installed (see install commands above or the [DDEV docs](https://ddev.readthedocs.io/en/stable/users/install/))
-- `packages: read` permission for the workflow's `GITHUB_TOKEN`, or a repository secret (`FDIC_DS_NPM_TOKEN`) with a GitHub token that has `read:packages` scope for the `@jflamb` packages, written into `.npmrc` before `npm ci` or the bootstrap runs
+- the `fdic-design-system` workspace available next to this repo, or an equivalent replacement for the local `file:` dependencies before `npm ci` or the bootstrap runs
 - GitHub Pages configured with source set to **GitHub Actions** before the deploy job can publish the static snapshot
 
 ## Design System Updates
 
-Update the aliased `@fdic-ds/components` and `@fdic-ds/tokens` dependencies in `package.json`, then run:
+Update the sibling `@jflamb/fdic-ds-components` and `@jflamb/fdic-ds-tokens` dependencies in `package.json`, then run:
 
 ```sh
 npm install
 drush cr
 ```
 
-The theme consumes the published packages only. Do not copy or vendor built design system files into this repository.
+The theme consumes the package surface directly. Do not copy or vendor built design system files into this repository.
