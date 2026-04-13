@@ -14,7 +14,7 @@
 ] %}
 {% set prose_view_modes = ['full', 'default', 'rss'] %}
 {% set prose_types = ['article', 'page'] %}
-{% set use_prose = node.bundle in prose_types and view_mode in prose_view_modes %}
+{% set use_prose = node.bundle in prose_types and view_mode in prose_view_modes and not fdic_is_front_node %}
 
 <article{{ attributes.addClass(classes) }}>
   {{ title_prefix }}

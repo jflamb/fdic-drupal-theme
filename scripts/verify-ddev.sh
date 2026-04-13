@@ -75,6 +75,7 @@ main() {
   for path in "${linked_paths[@]}"; do
     assert_symlink "$path"
   done
+  assert_file "node_modules/@jflamb/fdic-ds-components/styles.css"
   assert_file "node_modules/@jflamb/fdic-ds-tokens/styles.css"
   assert_file "node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js"
   assert_file "node_modules/lit/index.js"
@@ -86,6 +87,7 @@ main() {
 
   info "Checking rendered site and library assets"
   assert_http_head "$url/"
+  assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-components/styles.css"
   assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-tokens/styles.css"
   assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js"
   assert_http_head "$url/themes/custom/fdic/node_modules/@jflamb/fdic-ds-components/dist/fd-global-header-drupal.js"

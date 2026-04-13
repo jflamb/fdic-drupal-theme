@@ -189,10 +189,10 @@ stage_theme_node_modules() {
 
 install_theme_deps() {
   # Check for actual required files, not just the directory existing.
-  local tokens_css="$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-tokens/styles.css"
+  local components_css="$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-components/styles.css"
   local register_js="$PROJECT_ROOT/node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js"
 
-  if [[ -f "$tokens_css" ]] && [[ -f "$register_js" ]]; then
+  if [[ -f "$components_css" ]] && [[ -f "$register_js" ]]; then
     info "Theme npm deps already installed"
     return
   fi
@@ -205,7 +205,7 @@ install_theme_deps() {
   }
 
   # Verify the critical files actually arrived.
-  if [[ ! -f "$tokens_css" ]] || [[ ! -f "$register_js" ]]; then
+  if [[ ! -f "$components_css" ]] || [[ ! -f "$register_js" ]]; then
     die "@jflamb FDIC Design System packages installed but expected files are missing. Check the sibling workspace packages."
   fi
 

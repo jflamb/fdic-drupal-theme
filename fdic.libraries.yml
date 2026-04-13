@@ -1,12 +1,11 @@
-# Load the canonical token stylesheet directly so Drupal serves the same public
-# token contract documented by the design system package.
-tokens:
+# Load the canonical component stylesheet so Drupal serves the same public
+# CMS/browser contract documented by the design system package. This stylesheet
+# imports the token runtime and includes the supported fdic-composition-* page
+# patterns used by the theme's curated FDICnet example content.
+components:
   css:
     base:
-      node_modules/@jflamb/fdic-ds-tokens/styles.css: {}
-
-# Register the DS custom elements globally after tokens are available.
-components:
+      node_modules/@jflamb/fdic-ds-components/styles.css: {}
   js:
     js/custom-icons.js:
       attributes:
@@ -14,9 +13,6 @@ components:
     node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js:
       attributes:
         type: module
-  dependencies:
-    - fdic/tokens
-
 # Header-specific adapter code stays separate so it only loads on header markup.
 # fdic_preprocess_html() also exposes this adapter path through an import map
 # for js/global-header-init.js's bare module specifier.
