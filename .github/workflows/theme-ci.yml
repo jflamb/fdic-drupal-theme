@@ -21,19 +21,15 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Check out sibling design system workspace
+        run: |
+          git clone --depth 1 "https://github.com/${{ github.repository_owner }}/fdic-design-system.git" ../fdic-design-system
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-
-      - name: Configure GitHub Packages auth
-        env:
-          FDIC_DS_NPM_TOKEN: ${{ secrets.FDIC_DS_NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          token="${FDIC_DS_NPM_TOKEN:-$GITHUB_TOKEN}"
-          printf '//npm.pkg.github.com/:_authToken=%s\n' "$token" >> .npmrc
 
       - name: Install host test dependencies
         run: |
@@ -46,6 +42,13 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/ddev.gpg] https://pkg.ddev.com/apt/ * *" | sudo tee /etc/apt/sources.list.d/ddev.list
           sudo apt-get update
           sudo apt-get install -y ddev
+
+      - name: Build sibling design system packages
+        run: |
+          cd ../fdic-design-system
+          npm ci
+          npm run build:tokens
+          npm run build:components
 
       - name: Install npm dependencies
         run: npm ci
