@@ -319,7 +319,6 @@ fd-pagination:not(:defined) {
 
 .fdic-front-page-header {
   --fd-page-header-padding-block: 32px;
-  --fd-page-header-max-width: var(--fdic-layout-max-width, 1440px);
   --fd-page-header-title-size: 3rem;
   --fd-page-header-kicker-size: 1.25rem;
   --fd-page-header-padding-block-start-mobile: 24px;
@@ -462,13 +461,7 @@ fd-pagination:not(:defined) {
 
 .fdic-page-feedback {
   --fd-page-feedback-block-padding: 18px;
-  --fd-page-feedback-inline-padding:
-    max(
-      var(--fdic-layout-gutter-mobile, 16px),
-      calc((100vw - var(--fdic-layout-shell-max-width, 1312px)) / 2 + var(--fdic-layout-gutter, 64px))
-    );
   --fd-page-feedback-block-padding-mobile: 16px;
-  --fd-page-feedback-inline-padding-mobile: var(--fdic-layout-gutter-mobile, 16px);
 }
 
 .fdicnet-events fd-event-list {
@@ -516,10 +509,6 @@ fd-pagination:not(:defined) {
 }
 
 @media (max-width: 74rem) {
-  .fdicnet-news__messages {
-    grid-column: 1 / -1;
-  }
-
   .fdicnet-social__content {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -535,12 +524,17 @@ fd-pagination:not(:defined) {
     gap: var(--fdic-layout-content-gap, 1.5rem) var(--fdic-layout-col-2-gap, 48px);
   }
 
-  .fdicnet-news .fdic-composition-story {
-    gap: var(--fdic-layout-col-2-gap, 48px);
+  .fdicnet-news__feature {
+    display: contents;
   }
 
-  .fdicnet-news__feature {
+  .fdicnet-news #fdicnet-news-title,
+  .fdicnet-news .fdic-composition-story {
     grid-column: 1 / -1;
+  }
+
+  .fdicnet-news .fdic-composition-story {
+    gap: var(--fdic-layout-col-2-gap, 48px);
   }
 
   .fdicnet-latest,
@@ -565,6 +559,11 @@ fd-pagination:not(:defined) {
   }
 
   .fdicnet-news__feature {
+    display: contents;
+  }
+
+  .fdicnet-news #fdicnet-news-title,
+  .fdicnet-news .fdic-composition-story {
     grid-column: 1 / -1;
   }
 
@@ -605,6 +604,10 @@ fd-pagination:not(:defined) {
   .fdic-main-layout.has-sidebar-second:not(.has-sidebar-first),
   .fdicnet-social__content {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fdicnet-news__messages {
+    grid-column: 1 / -1;
   }
 
   .fdicnet-person-tile {
