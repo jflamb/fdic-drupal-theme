@@ -319,6 +319,7 @@ fd-pagination:not(:defined) {
 
 .fdic-front-page-header {
   --fd-page-header-padding-block: 32px;
+  --fd-page-header-max-width: var(--fdic-layout-max-width, 1440px);
   --fd-page-header-title-size: 3rem;
   --fd-page-header-kicker-size: 1.25rem;
   --fd-page-header-padding-block-start-mobile: 24px;
@@ -464,7 +465,7 @@ fd-pagination:not(:defined) {
   --fd-page-feedback-inline-padding:
     max(
       var(--fdic-layout-gutter-mobile, 16px),
-      calc((100vw - var(--fdic-layout-max-width, 1440px)) / 2 + var(--fdic-layout-gutter, 64px))
+      calc((100vw - var(--fdic-layout-shell-max-width, 1312px)) / 2 + var(--fdic-layout-gutter, 64px))
     );
   --fd-page-feedback-block-padding-mobile: 16px;
   --fd-page-feedback-inline-padding-mobile: var(--fdic-layout-gutter-mobile, 16px);
@@ -472,6 +473,11 @@ fd-pagination:not(:defined) {
 
 .fdicnet-events fd-event-list {
   --fd-event-list-col-3-gap: var(--fdic-layout-col-3-gap, 32px);
+  --fd-event-list-col-3-row-gap: calc(var(--fdic-layout-col-3-gap, 32px) / 2);
+}
+
+.fdicnet-featured-links fd-tile-list {
+  --fd-tile-list-col-3-row-gap: calc(var(--fdic-layout-col-3-gap, 48px) / 2);
 }
 
 .fdicnet-events .fdicnet-more {
@@ -520,6 +526,64 @@ fd-pagination:not(:defined) {
 
   .fdicnet-social-card {
     max-width: 14.625rem;
+  }
+}
+
+@media (min-width: 64rem) and (max-width: 73.999rem) {
+  .fdicnet-news .fdic-composition-feature-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--fdic-layout-content-gap, 1.5rem) var(--fdic-layout-col-2-gap, 48px);
+  }
+
+  .fdicnet-news .fdic-composition-story {
+    gap: var(--fdic-layout-col-2-gap, 48px);
+  }
+
+  .fdicnet-news__feature {
+    grid-column: 1 / -1;
+  }
+
+  .fdicnet-latest,
+  .fdicnet-news__messages {
+    margin-block-start: var(--fdic-spacing-xl, 1.5rem);
+  }
+
+  .fdicnet-latest {
+    padding-block-start: 0;
+    grid-column: 1;
+  }
+
+  .fdicnet-news__messages {
+    grid-column: 2;
+  }
+}
+
+@media (min-width: 48rem) and (max-width: 63.999rem) {
+  .fdicnet-news .fdic-composition-feature-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--fdic-layout-content-gap, 1.5rem) var(--fdic-layout-col-2-gap, 48px);
+  }
+
+  .fdicnet-news__feature {
+    grid-column: 1 / -1;
+  }
+
+  .fdicnet-news .fdic-composition-story__body {
+    margin-block-start: var(--fdic-composition-story-stacked-gap, var(--fdic-spacing-sm, 0.75rem));
+  }
+
+  .fdicnet-latest,
+  .fdicnet-news__messages {
+    margin-block-start: var(--fdic-spacing-xl, 1.5rem);
+  }
+
+  .fdicnet-latest {
+    padding-block-start: 0;
+    grid-column: 1;
+  }
+
+  .fdicnet-news__messages {
+    grid-column: 2;
   }
 }
 

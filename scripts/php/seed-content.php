@@ -89,7 +89,7 @@ $home_body = <<<'HTML'
 <div class="fdicnet-home">
   <section id="news" class="fdicnet-news fdic-composition-section" aria-labelledby="fdicnet-news-title">
     <div class="fdic-composition-section__inner fdic-composition-feature-rail">
-      <div class="fdicnet-news__feature">
+      <div class="fdicnet-news__feature fdic-composition-feature-item">
         <h2 id="fdicnet-news-title">Featured Story</h2>
         <div class="fdic-composition-story">
           <div class="fdic-composition-story__media">
@@ -120,7 +120,7 @@ $home_body = <<<'HTML'
             <p>Chairman Travis Hill spoke at the Single Resolution Mechanism&apos;s 10th Anniversary Conference in October, &amp; discussed reforms to enhance resolution preparedness.</p>
           </div>
           <p class="fdicnet-more">
-            <fd-link href="/node" size="sm">
+            <fd-link href="/node" size="md">
               More News
               <fd-icon slot="icon-end" name="caret-right" aria-hidden="true"></fd-icon>
             </fd-link>
@@ -139,7 +139,7 @@ $home_body = <<<'HTML'
           <li class="fdic-composition-title-stack"><h3><fd-link href="/node" size="md">2026 Mandatory and Required Training</fd-link></h3><p class="fdic-composition-meta">February 2, 2026 | FDIC-Wide</p></li>
         </ul>
         <p class="fdicnet-more">
-          <fd-link href="/node" size="sm">
+          <fd-link href="/node" size="md">
             More Messages
             <fd-icon slot="icon-end" name="caret-right" aria-hidden="true"></fd-icon>
           </fd-link>
@@ -197,31 +197,31 @@ $home_body = <<<'HTML'
       <div class="fdicnet-link-category fdic-composition-link-column">
         <h2 class="fdic-composition-link-column__title">Corporate Applications</h2>
         <ul class="fdic-composition-link-column__list">
-          <li><a href="/node">GovTA</a></li>
-          <li><a href="/node">CHRIS</a></li>
-          <li><a href="/node">ARCS</a></li>
-          <li><a href="/node">Employee Center</a></li>
-          <li><a href="/node">Federal Employee Health Benefits (FEHB)</a></li>
+          <li><fd-link href="/node" size="md">GovTA</fd-link></li>
+          <li><fd-link href="/node" size="md">CHRIS</fd-link></li>
+          <li><fd-link href="/node" size="md">ARCS</fd-link></li>
+          <li><fd-link href="/node" size="md">Employee Center</fd-link></li>
+          <li><fd-link href="/node" size="md">Federal Employee Health Benefits (FEHB)</fd-link></li>
         </ul>
       </div>
       <div id="knowledge" class="fdicnet-link-category fdic-composition-link-column">
         <h2 class="fdic-composition-link-column__title">Examiner Tools</h2>
         <ul class="fdic-composition-link-column__list">
-          <li><a href="/node">ViSION</a></li>
-          <li><a href="/node">Risk Examination Support</a></li>
-          <li><a href="/node">Examinations Resources</a></li>
-          <li><a href="/node">Compliance Examination Manual</a></li>
-          <li><a href="/node">Community Reinvestment Act</a></li>
+          <li><fd-link href="/node" size="md">ViSION</fd-link></li>
+          <li><fd-link href="/node" size="md">Risk Examination Support</fd-link></li>
+          <li><fd-link href="/node" size="md">Examinations Resources</fd-link></li>
+          <li><fd-link href="/node" size="md">Compliance Examination Manual</fd-link></li>
+          <li><fd-link href="/node" size="md">Community Reinvestment Act</fd-link></li>
         </ul>
       </div>
       <div id="career" class="fdicnet-link-category fdic-composition-link-column">
         <h2 class="fdic-composition-link-column__title">Training &amp; Onboarding</h2>
         <ul class="fdic-composition-link-column__list">
-          <li><a href="/node">Mandatory Training</a></li>
-          <li><a href="/node">Examiner Learning Program</a></li>
-          <li><a href="/node">Professional Learning Account (PLA)</a></li>
-          <li><a href="/node">LinkedIn Learning</a></li>
-          <li><a href="/node">ELX</a></li>
+          <li><fd-link href="/node" size="md">Mandatory Training</fd-link></li>
+          <li><fd-link href="/node" size="md">Examiner Learning Program</fd-link></li>
+          <li><fd-link href="/node" size="md">Professional Learning Account (PLA)</fd-link></li>
+          <li><fd-link href="/node" size="md">LinkedIn Learning</fd-link></li>
+          <li><fd-link href="/node" size="md">ELX</fd-link></li>
         </ul>
       </div>
     </div>
@@ -236,7 +236,7 @@ $home_body = <<<'HTML'
         <fd-event month="Feb" day="24" title="Section 508 Document Remediation Session (PPT/Excel)" href="/node" data-fdic-event-metadata='["FDIC-Wide", "Training"]'></fd-event>
       </fd-event-list>
       <p class="fdicnet-more">
-        <fd-link href="/node" size="sm">
+        <fd-link href="/node" size="md">
           More Events
           <fd-icon slot="icon-end" name="caret-right" aria-hidden="true"></fd-icon>
         </fd-link>
