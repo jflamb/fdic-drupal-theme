@@ -219,7 +219,12 @@ $home_body = <<<'HTML'
         <fd-event month="Feb" day="20" title="Planned eFOS+ Outage" href="/node" data-fdic-event-metadata='["FDIC-Wide"]'></fd-event>
         <fd-event month="Feb" day="24" title="Section 508 Document Remediation Session (PPT/Excel)" href="/node" data-fdic-event-metadata='["FDIC-Wide", "Training"]'></fd-event>
       </fd-event-list>
-      <p class="fdicnet-more"><a href="/node">More Events</a></p>
+      <p class="fdicnet-more">
+        <fd-link href="/node" size="md">
+          More Events
+          <fd-icon slot="icon-end" name="caret-right" aria-hidden="true"></fd-icon>
+        </fd-link>
+      </p>
     </div>
   </section>
 
@@ -249,9 +254,6 @@ $home_body = <<<'HTML'
                 <svg viewBox="0 0 256 256" aria-hidden="true"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40ZM92,176a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm-8-88A12,12,0,1,1,96,76,12,12,0,0,1,84,88Zm100,88a8,8,0,0,1-16,0V136a24,24,0,0,0-48,0v40a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0v5.31A40,40,0,0,1,184,136Z"/></svg>
               </a>
             </div>
-          </div>
-          <div class="fdicnet-social-card" aria-hidden="true"><img src="/themes/custom/fdic/assets/fdicnet-social-card.png" alt=""></div>
-        </div>
       </article>
     </div>
   </section>

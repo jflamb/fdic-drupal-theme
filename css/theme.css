@@ -261,13 +261,24 @@ fd-pagination:not(:defined) {
 .fdic-page--front .fdic-main-layout {
   width: 100%;
   max-width: none;
+  padding-inline: 0;
   padding-block: 0;
+  gap: 0;
+}
+
+.fdic-page--front .fdic-container.fdic-main-layout {
+  width: 100%;
+  max-width: none;
 }
 
 .fdic-page--front .fdic-content-region,
 .fdic-page--front .node__content,
 .fdic-page--front .fdic-prose {
   padding-block: 0;
+}
+
+.fdic-page--front .fdic-content {
+  width: 100%;
 }
 
 .fdic-page--front .fdic-prose > * + * {
@@ -436,7 +447,7 @@ fd-pagination:not(:defined) {
   max-width: 36ch;
 }
 
-.fdicnet-social__link a {
+:where(.fdicnet-social__link a) {
   overflow-wrap: anywhere;
 }
 

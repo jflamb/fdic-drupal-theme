@@ -86,13 +86,13 @@ Critical failures:
 
 Verify these integration points against the actual DS source code:
 
-- [ ] `libraries.yml` paths match the real export paths in `@fdic-ds/components/package.json`
+- [ ] `libraries.yml` paths match the real export paths in `@jflamb/fdic-ds-components/package.json`
       (check the `exports` map — the theme must use paths that exist)
 - [ ] Menu data shape in PHP matches the `DrupalMenuLinkLike` interface in
       `fd-global-header-drupal.ts` (fields: `title`, `url`, `current`, `below`,
       `description`, `keywords`, `overviewTitle`, `overviewUrl`, `ariaLabel`)
 - [ ] `global-header-init.js` imports from the correct package export path
-      (`@fdic-ds/components/fd-global-header-drupal`)
+      (`@jflamb/fdic-ds-components/fd-global-header-drupal`)
 - [ ] Token variable names used in `theme.css` match actual variables defined in
       `semantic.css` and `interaction.css`
 - [ ] Component tag names and attribute names used in Twig templates match the

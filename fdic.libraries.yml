@@ -16,7 +16,6 @@ components:
         type: module
   dependencies:
     - fdic/tokens
-
 # Header-specific adapter code stays separate so it only loads on header markup.
 # fdic_preprocess_html() also exposes this adapter path through an import map
 # for js/global-header-init.js's bare module specifier.

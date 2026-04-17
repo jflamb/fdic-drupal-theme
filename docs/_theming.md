@@ -2,15 +2,14 @@
 
 ## Asset Loading
 
-This theme intentionally consumes FDIC Design System assets from the sibling `fdic-design-system` workspace and serves the installed package files from `node_modules/@jflamb/`.
-
+This theme intentionally consumes FDIC Design System assets from published GitHub Packages and serves the installed package files from `node_modules/@jflamb/`.
 Deployment must run `npm install` before Drupal serves the theme. The installed `node_modules/@jflamb` package files must be present wherever Drupal serves theme libraries.
 
 The theme does not copy built design system files into the repository or into a generated vendor directory.
 
 ## Versioning
 
-`package.json` points at sibling `file:` DS packages. Commit `package-lock.json` after installs so local checks and any replicated workspace setup use the same transitive dependency graph.
+`package.json` points at versioned `@jflamb` packages from GitHub Packages. Commit `package-lock.json` after installs so local checks and CI use the same published dependency graph.
 
 ## Component Contracts
 
