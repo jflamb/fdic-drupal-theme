@@ -2,7 +2,7 @@
 
 ## Asset Loading
 
-This theme intentionally consumes FDIC Design System assets from the sibling `fdic-design-system` workspace and serves the installed package files from `node_modules/@jflamb/`.
+This theme intentionally consumes FDIC Design System assets from published GitHub Packages and serves the installed package files from `node_modules/@jflamb/`.
 
 The canonical browser-delivered stylesheet contract is `@jflamb/fdic-ds-components/styles.css`. It imports `@jflamb/fdic-ds-tokens/styles.css` and includes the documented `fdic-composition-*` page-pattern classes used by the curated FDICnet example page.
 
@@ -12,7 +12,7 @@ The theme does not copy built design system files into the repository or into a 
 
 ## Versioning
 
-`package.json` points at sibling `file:` DS packages. Commit `package-lock.json` after installs so local checks and any replicated workspace setup use the same transitive dependency graph.
+`package.json` points at versioned `@jflamb` packages from GitHub Packages. Commit `package-lock.json` after installs so local checks and CI use the same published dependency graph.
 
 ## Component Contracts
 

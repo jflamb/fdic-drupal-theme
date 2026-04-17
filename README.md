@@ -1,12 +1,11 @@
 # FDIC Drupal Theme
 
-Drupal 10+ theme that consumes the FDIC Design System directly from the sibling `fdic-design-system` workspace and serves the installed package artifacts from `node_modules/@jflamb/`.
+Drupal 10+ theme that consumes the published FDIC Design System packages from GitHub Packages and serves the installed package artifacts from `node_modules/@jflamb/`.
 
 ## Prerequisites
 
 - Drupal 10.2+
 - Node 18+
-- sibling checkout of `/Users/jlamb/Projects/fdic-design-system`
 - Drush
 
 ## Install
@@ -16,7 +15,7 @@ npm install
 drush cr
 ```
 
-Install dependencies with the committed `package-lock.json` so local checks and CI use the same package graph.
+Install dependencies from GitHub Packages with the committed `package-lock.json` before running theme checks or bootstrapping Drupal.
 
 The theme does not require bundling or a postinstall asset copy. Drupal libraries point directly at installed package files under `node_modules/@jflamb/`:
 
@@ -58,12 +57,12 @@ The theme also disables common System/Stable9 compatibility CSS libraries that a
 
 ## Dependency Source
 
-Phase 1 uses sibling workspace dependencies:
+The supported dependency contract is the published GitHub Packages release surface:
 
-- `@jflamb/fdic-ds-components` → `file:../fdic-design-system/packages/components`
-- `@jflamb/fdic-ds-tokens` → `file:../fdic-design-system/packages/tokens`
+- `@jflamb/fdic-ds-components` → `^0.1.0`
+- `@jflamb/fdic-ds-tokens` → `^0.1.0`
 
-That removes the vendored tarball flow and keeps the Drupal theme aligned with the design system's published package surface. For local verification, keep both repositories as siblings under `/Users/jlamb/Projects`.
+That keeps the Drupal theme aligned with the design system's published package surface. Local development should install those same versioned packages rather than switching back to sibling `file:` dependencies.
 
 ## Theme Services
 
@@ -80,8 +79,6 @@ DDEV is the canonical Drupal integration environment for this theme. Static outp
 - Docker Desktop (or OrbStack / Colima)
 - [DDEV](https://ddev.readthedocs.io/en/stable/) (`brew install ddev/ddev/ddev`)
 - Node 18+ and npm
-- sibling checkout of `/Users/jlamb/Projects/fdic-design-system`
-
 ### Quick start
 
 ```sh
@@ -114,7 +111,7 @@ The theme repo is the DDEV project. `.ddev/config.yaml` points `docroot` at `dru
 2. Runs `ddev composer create drupal/recommended-project:^10` inside `drupal/`
 3. Installs Drush (`drush/drush`) if not already present
 4. Creates `drupal/web/themes/custom/fdic` and links the theme's Drupal files and asset directories into it
-5. Runs `npm install` for the theme's sibling `@jflamb` design-system dependencies
+5. Runs `npm install` for the published `@jflamb` design-system dependencies
 6. Installs Drupal with the standard profile
 7. Enables and sets the FDIC theme as default
 8. Places blocks in the theme's regions (header, content, breadcrumb, highlighted)
@@ -169,12 +166,12 @@ Requirements:
 
 - Docker available on the runner (GitHub-hosted Ubuntu runners include it)
 - DDEV installed (see install commands above or the [DDEV docs](https://ddev.readthedocs.io/en/stable/users/install/))
-- the `fdic-design-system` workspace available next to this repo, or an equivalent replacement for the local `file:` dependencies before `npm ci` or the bootstrap runs
+- npm access to `@jflamb` packages on GitHub Packages before `npm ci` or the bootstrap runs
 - GitHub Pages configured with source set to **GitHub Actions** before the deploy job can publish the static snapshot
 
 ## Design System Updates
 
-Update the sibling `@jflamb/fdic-ds-components` and `@jflamb/fdic-ds-tokens` dependencies in `package.json`, then run:
+Update the `@jflamb/fdic-ds-components` and `@jflamb/fdic-ds-tokens` versions in `package.json`, then run:
 
 ```sh
 npm install

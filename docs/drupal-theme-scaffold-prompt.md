@@ -8,7 +8,7 @@ FDIC Design System web components and tokens.
 The FDIC Design System (`fdic-design-system` repo) publishes two npm packages to
 GitHub Packages (`npm.pkg.github.com`):
 
-### `@fdic-ds/tokens` (v0.1.0)
+### `@jflamb/fdic-ds-tokens` (v0.1.0)
 CSS custom property files:
 - `semantic.css` — color primitives, semantic roles, dark-mode via `light-dark()`,
   uses `@property` for animated tokens, imports `interaction.css`
@@ -19,7 +19,7 @@ Token naming convention: `--ds-color-{role}-{variant}` for semantics,
 `--ds-color-{family}-{step}` for primitives. Focus tokens: `--ds-focus-*`.
 Motion tokens: `--ds-motion-*`.
 
-### `@fdic-ds/components` (v0.1.0)
+### `@jflamb/fdic-ds-components` (v0.1.0)
 Lit-based web components, all prefixed `fd-`. Key exports:
 
 **Layout/chrome:**
@@ -56,7 +56,7 @@ Lit-based web components, all prefixed `fd-`. Key exports:
 - `fd-header-search` — header search input
 
 **Drupal-specific (already built into the components package):**
-- `@fdic-ds/components/fd-global-header-drupal` exports:
+- `@jflamb/fdic-ds-components/fd-global-header-drupal` exports:
   - `createFdGlobalHeaderNavigationFromDrupal(items)` — maps Drupal menu link
     arrays (`{ title, url, current, below[], description, keywords,
     overviewTitle, overviewUrl, ariaLabel }`) to the header's navigation model
@@ -64,8 +64,8 @@ Lit-based web components, all prefixed `fd-`. Key exports:
     including search config
 
 **Registration:**
-- `@fdic-ds/components/register-all` — registers all custom elements at once
-- `@fdic-ds/components/register/fd-{name}` — individual registration per component
+- `@jflamb/fdic-ds-components/register-all` — registers all custom elements at once
+- `@jflamb/fdic-ds-components/register/fd-{name}` — individual registration per component
 
 ## What to build
 
@@ -75,15 +75,15 @@ Lit-based web components, all prefixed `fd-`. Key exports:
   "name": "fdic-drupal-theme",
   "private": true,
   "dependencies": {
-    "@fdic-ds/components": "^0.1.0",
-    "@fdic-ds/tokens": "^0.1.0"
+    "@jflamb/fdic-ds-components": "^0.1.0",
+    "@jflamb/fdic-ds-tokens": "^0.1.0"
   }
 }
 ```
 
-Include an `.npmrc` pointing to GitHub Packages for the `@fdic-ds` scope:
+Include an `.npmrc` pointing to GitHub Packages for the `@jflamb` scope:
 ```
-@fdic-ds:registry=https://npm.pkg.github.com
+@jflamb:registry=https://npm.pkg.github.com
 ```
 
 ### 2. fdic.info.yml
@@ -92,7 +92,7 @@ Define regions: header, content, sidebar_first, sidebar_second, footer,
 page_top, page_bottom, breadcrumb, highlighted.
 
 ### 3. fdic.libraries.yml
-Declare libraries that load the DS assets from `node_modules/@fdic-ds/`:
+Declare libraries that load the DS assets from `node_modules/@jflamb/`:
 
 - `fdic/tokens` — loads `semantic.css` (which imports `interaction.css`)
 - `fdic/components` — loads `register-all.js` as ES module; depends on `fdic/tokens`
@@ -182,7 +182,7 @@ Small ES module script that:
 - Reads the Drupal menu data from a `<script type="application/json">` block
   in the header region (populated by the preprocess function)
 - Calls `createFdGlobalHeaderContentFromDrupal()` from
-  `@fdic-ds/components/fd-global-header-drupal`
+  `@jflamb/fdic-ds-components/fd-global-header-drupal`
 - Passes the result to the `<fd-global-header>` element's `.content` property
 
 ### 8. README.md
@@ -196,7 +196,7 @@ Brief setup instructions:
 - The theme CONSUMES the DS packages — it never copies or vendors built files
 - All component JS loads as ES modules (`type: module` in libraries.yml)
 - Tokens are loaded as plain CSS — no build step needed for the theme itself
-- The Drupal adapter (`fd-global-header-drupal`) ships with `@fdic-ds/components`,
+- The Drupal adapter (`fd-global-header-drupal`) ships with `@jflamb/fdic-ds-components`,
   not in this theme
 - Twig templates use `<fd-*>` custom elements directly — no React/Vue bridge
 - Form element templates progressively enhance — if JS fails to load,

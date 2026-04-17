@@ -16,9 +16,9 @@ Each criterion is rated 0–3:
 
 | # | Criterion | Max | What "3" looks like |
 |---|-----------|-----|---------------------|
-| 1.1 | `package.json` declares `@fdic-ds/components` and `@fdic-ds/tokens` as dependencies with semver ranges | 3 | Both listed with `^0.1.0`, `private: true`, no extraneous dependencies |
-| 1.2 | `.npmrc` scopes `@fdic-ds` to GitHub Packages registry | 3 | Single line `@fdic-ds:registry=https://npm.pkg.github.com`, no hardcoded auth tokens |
-| 1.3 | No vendored/copied DS assets — all references point to `node_modules/@fdic-ds/` | 3 | Zero DS source files checked into the theme repo; libraries.yml paths all start with `node_modules/@fdic-ds/` |
+| 1.1 | `package.json` declares `@jflamb/fdic-ds-components` and `@jflamb/fdic-ds-tokens` as dependencies with semver ranges | 3 | Both listed with `^0.1.0`, `private: true`, no extraneous dependencies |
+| 1.2 | `.npmrc` scopes `@jflamb` to GitHub Packages registry | 3 | Single line `@jflamb:registry=https://npm.pkg.github.com`, no hardcoded auth tokens |
+| 1.3 | No vendored/copied DS assets — all references point to `node_modules/@jflamb/` | 3 | Zero DS source files checked into the theme repo; libraries.yml paths all start with `node_modules/@jflamb/` |
 | 1.4 | `.gitignore` excludes `node_modules/` | 3 | Present and correct |
 | 1.5 | No build step required for the theme itself | 3 | Theme works with just `npm install` + `drush cr` — no webpack, no PostCSS, no compilation |
 
