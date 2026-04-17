@@ -19,7 +19,7 @@ Install dependencies from GitHub Packages with the committed `package-lock.json`
 
 The theme does not require bundling or a postinstall asset copy. Drupal libraries point directly at installed package files under `node_modules/@jflamb/`:
 
-- `node_modules/@jflamb/fdic-ds-components/styles.css` is the canonical browser stylesheet contract. It imports the token runtime and includes the documented `fdic-composition-*` page patterns.
+- `node_modules/@jflamb/fdic-ds-tokens/styles.css` loads the canonical token runtime.
 - `node_modules/@jflamb/fdic-ds-components/dist/register/register-all.js` registers the FDIC web components as ES modules.
 - `node_modules/@jflamb/fdic-ds-components/dist/fd-global-header-drupal.js` remains available for Drupal menu adapter experiments.
 
@@ -43,10 +43,7 @@ The header search defaults are stored in `config/install/fdic.settings.yml` and 
 
 ## Tokens and Composition
 
-The canonical browser stylesheet for this theme is `@jflamb/fdic-ds-components/styles.css`. That package stylesheet imports `@jflamb/fdic-ds-tokens/styles.css`, so Drupal pages receive both the public token runtime and the supported composition pattern surface from a single DS entrypoint.
-
-Use the FDIC public tokens exported by `@jflamb/fdic-ds-tokens/styles.css`, especially the shared `--fdic-color-*`, `--fdic-spacing-*`, `--fdic-layout-*`, `--fdic-font-*`, and focus-ring tokens that the design system components already consume.
-
+The npm token package is canonical for this theme. Use the FDIC public tokens exported by `@jflamb/fdic-ds-tokens/styles.css`, especially the shared `--fdic-color-*`, `--fdic-spacing-*`, `--fdic-layout-*`, `--fdic-font-*`, and focus-ring tokens that the design system components already consume.
 `css/theme.css` is intentionally limited to Drupal shell layout, prose/table wrappers, fallback visibility, and FDICnet-specific decorative exceptions. Reusable page composition now comes from the documented `fdic-composition-*` classes shipped in `@jflamb/fdic-ds-components/styles.css`. The theme should not introduce token aliases or restyle FDIC components internally.
 
 ## Theme Base

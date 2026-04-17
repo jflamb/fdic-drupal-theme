@@ -3,9 +3,6 @@
 ## Asset Loading
 
 This theme intentionally consumes FDIC Design System assets from published GitHub Packages and serves the installed package files from `node_modules/@jflamb/`.
-
-The canonical browser-delivered stylesheet contract is `@jflamb/fdic-ds-components/styles.css`. It imports `@jflamb/fdic-ds-tokens/styles.css` and includes the documented `fdic-composition-*` page-pattern classes used by the curated FDICnet example page.
-
 Deployment must run `npm install` before Drupal serves the theme. The installed `node_modules/@jflamb` package files must be present wherever Drupal serves theme libraries.
 
 The theme does not copy built design system files into the repository or into a generated vendor directory.

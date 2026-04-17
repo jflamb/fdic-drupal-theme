@@ -1,4 +1,5 @@
 import { createFdGlobalHeaderContentFromDrupal } from '@jflamb/fdic-ds-components/fd-global-header-drupal';
+import { globalHeaderStorySource } from './global-header-story-source.js';
 
 const parseJsonSource = (source) => {
   if (!source?.trim()) {
@@ -22,7 +23,9 @@ const initGlobalHeader = (root = document) => {
   }
 
   const source = header.querySelector('script[data-fdic-global-header-source]');
-  const content = parseJsonSource(source?.textContent ?? header.dataset.fdicGlobalHeaderSource);
+  const content = header.dataset.fdicGlobalHeaderStory === 'shy'
+    ? globalHeaderStorySource
+    : parseJsonSource(source?.textContent ?? header.dataset.fdicGlobalHeaderSource);
   if (!content) {
     return;
   }
