@@ -201,7 +201,7 @@ install_theme_deps() {
     warn "npm install failed."
     warn "Ensure NODE_AUTH_TOKEN or an npm login can read @jflamb packages from GitHub Packages."
     die "Cannot continue without the published @jflamb FDIC Design System packages."
-  fi
+  }
 
   # Verify the critical files actually arrived.
   if [[ ! -f "$components_css" ]] || [[ ! -f "$register_js" ]]; then
